@@ -21,6 +21,8 @@ import useAppData from "../hooks/useAppData";
 
 import styles2 from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
+import {PropertyDetails} from "../views/PropertyDetails/PropertyDetails"
+
 
 import {
   createMuiTheme,
@@ -55,6 +57,10 @@ let ps;
 
 const switchRoutes = (
   <Switch>
+
+<Route path="/admin/property/:id" component={PropertyDetails} />
+
+
     {routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (

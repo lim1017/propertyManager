@@ -7,17 +7,18 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    width: 445,
   },
   media: {
     height: 140,
   },
 });
 
-export default function MediaCard({title, img}) {
+export default function MediaCard({title, img, description, id}) {
   const classes = useStyles();
 
   console.log(img)
@@ -35,18 +36,21 @@ export default function MediaCard({title, img}) {
             {title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
+        <Link
+          to={{
+            pathname: `/admin/property/${id}`,
+            state: { state: { title, img, description } }
+          }}
+        >
+        <Button variant="contained" size="small" color="primary">
           Learn More
         </Button>
+        </Link>
       </CardActions>
     </Card>
   );
