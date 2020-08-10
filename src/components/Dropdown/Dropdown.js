@@ -19,14 +19,12 @@ const useStyles = makeStyles((theme) => ({
 const Dropdown = ({ data, label, handleChg, value }) => {
   const classes = useStyles();
 
-console.log(data)
 
 
   const renderDropDown = ()=>{
     if(data === undefined){
       return null
     } else {
-      console.log(data)
 
       return (
         <FormControl variant="filled" className={classes.formControl}>

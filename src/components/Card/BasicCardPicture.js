@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard({title, img, description, id}) {
+export default function MediaCard({title, img, description, id, data}) {
   const classes = useStyles();
 
   return (
@@ -42,7 +42,7 @@ export default function MediaCard({title, img, description, id}) {
         <Link
           to={{
             pathname: `/admin/property/${id}`,
-            state: { state: { title, img, description } }
+            state: { state: { data, propertyID:id } }
           }}
         >
         <Button variant="contained" size="small" color="primary">

@@ -59,6 +59,7 @@ const switchRoutes = (
   <Switch>
 
 <Route path="/admin/property/:id" component={PropertyDetails} />
+{/* <Route path="/admin/createproperty/" component={CreateProperty} /> */}
 
 
     {routes.map((prop, key) => {

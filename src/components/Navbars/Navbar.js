@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -9,16 +9,22 @@ import Button from "@material-ui/core/Button";
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
 import Dropdown from "../Dropdown/Dropdown";
 import appDataContext from "../../hooks/useContext";
-import {SET_ACTIVE_COMPANY, SET_PROPERTIES} from "../../hooks/reducers/appDataReducer"
+import {
+  SET_ACTIVE_COMPANY,
+  SET_PROPERTIES,
+  SET_DATA,
+  SET_COMPANY,
+  SET_TENANTS,
+  SET_LOADING,
+  SET_USER,
+} from "../../hooks/reducers/appDataReducer";
 import propertyAPI from "../../apis//propertyManagerAPI";
-
 
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
-
   const { state, dispatch } = useContext(appDataContext);
-
+  console.log(state);
   const classes = useStyles();
 
   const { color } = props;
@@ -26,39 +32,79 @@ export default function Header(props) {
     [" " + classes[color]]: color,
   });
 
-  const handleChg =(e)=>{
-    dispatch({type: SET_ACTIVE_COMPANY, activeCompany: e.target.value})
-  }
+  const handleChg = (e) => {
+    dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
+  };
 
   useEffect(() => {
+    async function fetchData() {
+      const user = await propertyAPI.get("/users");
+      dispatch({ type: SET_USER, user: user.data[0] });
 
-     async function updateProperties (){
-      const companyID = state.activeCompany
+      const userID = user.data[0].user_id;
+      const companies = await propertyAPI.get(`/companies/${userID}`);
+      dispatch({
+        type: SET_COMPANY,
+        company: companies.data,
+        activeCompany: state.activeCompany
+          ? state.activeCompany
+          : companies.data[0].company_id,
+      });
+
+      const companyID = companies.data[0].company_id;
       const properties = await propertyAPI.get(`/properties/${companyID}`);
       dispatch({ type: SET_PROPERTIES, properties: properties.data });
     }
 
-    updateProperties()
+    fetchData();
+  }, []);
 
-  }, [state.activeCompany])
+  useEffect(() => {
+    async function updateProperties() {
+      const companyID = state.activeCompany;
+      const properties = await propertyAPI.get(`/properties/${companyID}`);
+      dispatch({ type: SET_PROPERTIES, properties: properties.data });
+    }
+
+    updateProperties();
+  }, [state.activeCompany]);
 
   return (
-    <AppBar className={classes.appBar + appBarClasses} style={{borderBottom: "2px solid black"}}>
+    <AppBar
+      className={classes.appBar + appBarClasses}
+      style={{ borderBottom: "2px solid black" }}
+    >
       <Toolbar className={classes.container}>
-        <div className={classes.flex}>
-          <Dropdown
-            data={state.company}
-            label="Company"
-            value={state.activeCompany}
-            isLoading={state.isLoading}
-            handleChg={handleChg}
-          />
-        </div>
+        <div style={{display:"flex", width: "100%", justifyContent:"space-between"}}>
+          <div style={{display:"flex", alignItems:"center"}}>
+            <Dropdown
+              data={state.company}
+              label="Company"
+              value={state.activeCompany}
+              isLoading={state.isLoading}
+              handleChg={handleChg}
+            />
+            <Button
+              style={{
+                marginRight: "1em",
+                display: "flex",
+                justifyContent: "flex-start",
+              }}
+              variant="contained"
+              color="primary"
+            >
+              {" "}
+              Add Property{" "}
+            </Button>
+          </div>
 
-        <Button variant="contained" color="primary">
-          {" "}
-          Logout{" "}
-        </Button>
+          <div style={{alignSelf:"center"}}>    
+          <Button variant="contained" color="primary">
+            {" "}
+            Logout{" "}
+          </Button>
+          </div>
+        </div> 
       </Toolbar>
     </AppBar>
   );
