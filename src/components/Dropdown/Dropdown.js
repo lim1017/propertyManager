@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -16,30 +16,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Dropdown = ({ data, label }) => {
+const Dropdown = ({ data, label, handleChg, value }) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(data[0]);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+console.log(data)
+
+
+  const renderDropDown = ()=>{
+    if(data === undefined){
+      return null
+    } else {
+      console.log(data)
+
+      return (
+        <FormControl variant="filled" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={value}
+          onChange={handleChg}
+        >
+          {data ? data.map((element) => {
+                return <MenuItem value={element.company_id}>{element.name}</MenuItem>;
+              })
+            : null}
+        </Select>
+      </FormControl>
+      )
+    }
+  }
 
   return (
-    <FormControl variant="filled" className={classes.formControl}>
-      <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
-      <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
-        value={value}
-        onChange={handleChange}
-      >
-        {data.length !== 0
-          ? data.map((element) => {
-              return <MenuItem value={element}>{element}</MenuItem>;
-            })
-          : null}
-      </Select>
-    </FormControl>
-  );
+    <div>{renderDropDown()}</div>
+  ) 
 };
 export default Dropdown;
