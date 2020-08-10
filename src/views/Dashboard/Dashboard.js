@@ -42,9 +42,7 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log('changing active')
-  }, [state.activeCompany])
+ 
 
   console.log(state);
 
@@ -87,18 +85,20 @@ export default function Dashboard() {
         justifyContent: "space-around",
       }}
     >
-      {buildings.map((building) => {
+      {state.properties ? state.properties.map((building) => {
         return (
           <div style={{ marginBottom: 10 }}>
             <BasicCardPicture
               title={building.name}
-              img={building.img}
+              img={building.image}
               description={building.description}
-              id={building.id}
+              id={building.property_id}  
             />
           </div>
         );
-      })}
+      })
+      : <div>LOADING </div>
+      }
     </div>
   );
 }
