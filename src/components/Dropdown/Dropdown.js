@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Dropdown = ({ data, label, handleChg, value }) => {
+const Dropdown = ({ data, label, handleChg, value, isDisabled }) => {
   const classes = useStyles();
 
-
+  console.log(isDisabled)
 
   const renderDropDown = ()=>{
     if(data === undefined){
@@ -27,7 +27,7 @@ const Dropdown = ({ data, label, handleChg, value }) => {
     } else {
 
       return (
-        <FormControl variant="filled" className={classes.formControl}>
+        <FormControl variant="filled" className={classes.formControl} disabled={isDisabled} >
         <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"

@@ -32,6 +32,11 @@ export default function Header(props) {
     [" " + classes[color]]: color,
   });
 
+  console.log(props)
+  console.log(props.location.pathname)
+  let isDisabled = props.location.pathname==="/admin/dashboard" ? null : "disabled"
+
+
   const handleChg = (e) => {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
   };
@@ -83,6 +88,7 @@ export default function Header(props) {
               value={state.activeCompany}
               isLoading={state.isLoading}
               handleChg={handleChg}
+              isDisabled={isDisabled}
             />
             <Button
               style={{
