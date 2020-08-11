@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -13,13 +13,13 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import avatar from "assets/img/faces/marc.jpg";
-import propertyAPI from "../../apis/propertyManagerAPI"
+import propertyAPI from "../../apis/propertyManagerAPI";
 import { Context } from "../../hooks/reducers/appDataReducer";
+
 import {
   SET_ACTIVE_COMPANY,
-  SET_COMPANY
+  SET_COMPANY,
 } from "../../hooks/reducers/appDataReducer";
-
 
 const styles = {
   cardCategoryWhite: {
@@ -43,39 +43,79 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function CompanyProfile(props) {
-
   const context = useContext(Context);
   const { state, dispatch, fetchCompanies, createCompany } = context;
 
-
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
+  const [companyDetails, setCompanyDetails] = useState(isEditing ? {}: {
+    name:"",
+    email:"",
+    address: {address:"", city:"", country:"", postal:""},
+    contact: {firstName:"", lastName:"", personalEmail:"", phone1:"", phone2:""},
+    notes:""
+  } );
+  const [loading, setLoading] = useState(isEditing ? true: false);
+
+  const activeUser = state.user.user_id;
+
+  useEffect(() => {
 
 
-  const [companyDetails, setCompanyDetails]= useState({})
+    async function getCompanyDetails() {
+      setLoading(true)
 
-  const handleChange= (e, id) =>{
-    setCompanyDetails({...companyDetails, [id]:e.target.value})
-  }
+      const activeCompany = state.company.filter((comp) => {
+        return comp.name === state.activeCompany;
+      });
+      console.log(activeCompany[0]);
+      const details = await propertyAPI.get(
+        `/company/${activeUser}&${activeCompany[0].company_id}`
+      );
+      console.log(details);
+      setCompanyDetails(details.data[0]);
+      setLoading(false)
 
-  const handleSubmit= async ()=>{
-    const activeUser=state.user.user_id
-    if (!editState){
-
-
-      await createCompany(companyDetails, activeUser)
-      await fetchCompanies(activeUser)
-
-      dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: companyDetails.companyName })
-      props.history.push("/admin/dashboard")
-
-  
     }
-  }
+
+    if (editState) {
+      getCompanyDetails();
+    }
+
+
+
+  }, []);
+
+  console.log(companyDetails);
+
+  const handleChange = (e, id) => {
+    console.log(id)
+
+    if (id === "city" || id === "country" || id === "postal" || id === "address"){
+      setCompanyDetails({ ...companyDetails, address:{...companyDetails.address, [id]: e.target.value} });
+    } else if (id === "firstName" || id === "lastName" || id === "phone1" || id === "phone2" || id === "personalEmail" || id === "title"){
+      setCompanyDetails({ ...companyDetails, contact:{...companyDetails.contact, [id]: e.target.value} });
+    } else setCompanyDetails({ ...companyDetails, [id]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    if (!editState) {
+      await createCompany(companyDetails, activeUser);
+      await fetchCompanies(activeUser);
+
+      dispatch({
+        type: SET_ACTIVE_COMPANY,
+        activeCompany: companyDetails.companyName,
+      });
+      props.history.push("/admin/dashboard");
+    }
+  };
 
   const classes = useStyles();
   return (
     <div>
+      {loading ? <div>loading........</div> :
+      
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -88,29 +128,29 @@ export default function CompanyProfile(props) {
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>
+                  <InputLabel>Company Name</InputLabel>
                   <CustomInput
-                    labelText="Company Name"
-                    id="companyName"
+                    // labelText="Company Name"
+                    id="name"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.name}
                     formControlProps={{
                       fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
-                    inputProps={
-                      {
-                      }
-                    }
-                    
+                    inputProps={{}}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={5}>
+                <InputLabel>Email address</InputLabel>
                   <CustomInput
-                    labelText="Email address"
+                    // labelText="Email address"
                     id="email"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.email}
                     formControlProps={{
                       fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                   />
                 </GridItem>
@@ -118,56 +158,59 @@ export default function CompanyProfile(props) {
 
               <GridContainer>
                 <GridItem xs={12} sm={12} md={8}>
+                <InputLabel>Address</InputLabel>
                   <CustomInput
-                    labelText="Address"
+                    // labelText="Address"
                     id="address"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.address.address}
                     formControlProps={{
                       fullWidth: true,
                     }}
-                    inputProps={
-                      {
-                        style:{width:"100%"}
-                      }
-                    }
-                    
+                    inputProps={{
+                      style: { width: "100%", marginTop:0 },
+                    }}
                   />
                 </GridItem>
-               
               </GridContainer>
 
               <GridContainer>
                 <GridItem xs={12} sm={12} md={4}>
+                <InputLabel>City</InputLabel>
                   <CustomInput
-                    labelText="City"
+                    // labelText="City"
                     id="city"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.address.city}
                     formControlProps={{
                       fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
+                <InputLabel>Country</InputLabel>
                   <CustomInput
-                    labelText="Country"
+                    // labelText="Country"
                     id="country"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.address.country}
                     formControlProps={{
                       fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
+                <InputLabel>Postal Code</InputLabel>
                   <CustomInput
-                    labelText="Postal Code"
+                    // labelText="Postal Code"
                     id="postal"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.address.postal}
                     formControlProps={{
                       fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                   />
                 </GridItem>
@@ -175,17 +218,20 @@ export default function CompanyProfile(props) {
 
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
-                  <div style={{ marginTop: "5px", fontSize:'18px' }}>Contact Information:</div>
+                  <div style={{ marginTop: "5px", marginBottom:"10px", fontSize: "18px" }}>
+                    Contact Information:
+                  </div>
                 </GridItem>
               </GridContainer>
 
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>First Name</InputLabel>
                   <CustomInput
-                    labelText="First Name"
+                    // labelText="First Name"
                     id="firstName"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.contact.firstName}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -193,11 +239,12 @@ export default function CompanyProfile(props) {
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>Last Name</InputLabel>
                   <CustomInput
-                    labelText="Last Name"
+                    // labelText="Last Name"
                     id="lastName"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.contact.lastName}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -207,11 +254,12 @@ export default function CompanyProfile(props) {
               </GridContainer>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>Title</InputLabel>
                   <CustomInput
-                    labelText="Title"
+                    // labelText="Title"
                     id="title"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.contact.title}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -219,11 +267,12 @@ export default function CompanyProfile(props) {
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>Email</InputLabel>
                   <CustomInput
-                    labelText="Email"
-                    id="email"
+                    // labelText="Email"
+                    id="personalEmail"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.contact.personalEmail}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -234,11 +283,12 @@ export default function CompanyProfile(props) {
 
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>Phone #1</InputLabel>
                   <CustomInput
-                    labelText="Phone #1"
+                    // labelText="Phone #1"
                     id="phone1"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.contact.phone1}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -246,11 +296,12 @@ export default function CompanyProfile(props) {
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>Phone #2</InputLabel>
                   <CustomInput
-                    labelText="Phone #2"
+                    // labelText="Phone #2"
                     id="phone2"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.contact.phone2}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -265,10 +316,10 @@ export default function CompanyProfile(props) {
                     About/Notes:
                   </InputLabel>
                   <CustomInput
-                    labelText="Tell us about this company"
-                    id="about"
+                    // labelText="Tell us about this company"
+                    id="notes"
                     handleChange={handleChange}
-                    value= {companyDetails.id}
+                    value={companyDetails.notes}
                     formControlProps={{
                       fullWidth: true,
                     }}
@@ -281,7 +332,9 @@ export default function CompanyProfile(props) {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary" onClick={handleSubmit}>Save Profile</Button>
+              <Button color="primary" onClick={handleSubmit}>
+                Save Profile
+              </Button>
             </CardFooter>
           </Card>
         </GridItem>
@@ -307,6 +360,7 @@ export default function CompanyProfile(props) {
           </Card>
         </GridItem> */}
       </GridContainer>
+  }
     </div>
   );
 }
