@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import appDataContext from "../../hooks/useContext";
+import {Context} from "../../hooks/reducers/appDataReducer";
 import {
   SET_DATA,
   SET_COMPANY,
@@ -18,23 +18,21 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
-  const { state, dispatch } = useContext(appDataContext);
+  const context = useContext(Context);
+  const { state, dispatch, fetchCompanies } = context
 
 
   async function updateProperties() {
-    console.log(state)
     // const companyID = state.activeCompany;
     const activeCompany=state.company.filter(comp =>{
       return comp.name===state.activeCompany
     })
-    console.log(activeCompany[0])
     const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
     dispatch({ type: SET_PROPERTIES, properties: properties.data });
   }
 
   useEffect(() => {
     async function fetchData() {
-      console.log('inside fetching')
       const user = await propertyAPI.get("/users");
       dispatch({ type: SET_USER, user: user.data[0] });
 

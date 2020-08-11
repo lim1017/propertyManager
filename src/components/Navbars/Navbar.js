@@ -9,7 +9,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
 import Dropdown from "../Dropdown/Dropdown";
-import appDataContext from "../../hooks/useContext";
+import {Context} from "../../hooks/reducers/appDataReducer";
 import {
   SET_ACTIVE_COMPANY,
   SET_PROPERTIES,
@@ -24,7 +24,8 @@ import propertyAPI from "../../apis//propertyManagerAPI";
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
-  const { state, dispatch } = useContext(appDataContext);
+  const context = useContext(Context);
+  const { state, dispatch } = context
   const classes = useStyles();
 
   const { color } = props;

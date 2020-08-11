@@ -14,7 +14,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI"
-import appDataContext from "../../hooks/useContext";
+import { Context } from "../../hooks/reducers/appDataReducer";
 import {
   SET_ACTIVE_COMPANY,
   SET_COMPANY
@@ -43,7 +43,11 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function CompanyProfile(props) {
-  const { state, dispatch } = useContext(appDataContext);
+
+  const context = useContext(Context);
+  const { state, dispatch, fetchCompanies } = context;
+
+
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
 
@@ -57,10 +61,14 @@ export default function CompanyProfile(props) {
   const handleSubmit= async ()=>{
     const activeUser=state.user.user_id
     if (!editState){
+
       await propertyAPI.post('/company/create', {...companyDetails, activeUser})
       .then(async function (response) {
-        const companies = await propertyAPI.get(`/companies/${activeUser}`);
-        dispatch({type: SET_COMPANY, company: companies.data});
+        await fetchCompanies(activeUser)
+        // const companies = await propertyAPI.get(`/companies/${activeUser}`);
+        // dispatch({ type: SET_COMPANY, company: companies.data });
+        
+      }).then(()=>{
         dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: companyDetails.companyName })
         props.history.push("/admin/dashboard")
       })
