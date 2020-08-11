@@ -19,8 +19,6 @@ const useStyles = makeStyles((theme) => ({
 const Dropdown = ({ data, label, handleChg, value, isDisabled }) => {
   const classes = useStyles();
 
-  console.log(isDisabled)
-
   const renderDropDown = ()=>{
     if(data === undefined){
       return null

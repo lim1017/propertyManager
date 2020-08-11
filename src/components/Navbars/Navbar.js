@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -24,7 +25,6 @@ const useStyles = makeStyles(styles);
 
 export default function Header(props) {
   const { state, dispatch } = useContext(appDataContext);
-  console.log(state);
   const classes = useStyles();
 
   const { color } = props;
@@ -32,10 +32,8 @@ export default function Header(props) {
     [" " + classes[color]]: color,
   });
 
-  console.log(props)
-  console.log(props.location.pathname)
-  let isDisabled = props.location.pathname==="/admin/dashboard" ? null : "disabled"
-
+  let isDisabled =
+    props.location.pathname === "/admin/dashboard" ? null : "disabled";
 
   const handleChg = (e) => {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
@@ -48,6 +46,7 @@ export default function Header(props) {
 
       const userID = user.data[0].user_id;
       const companies = await propertyAPI.get(`/companies/${userID}`);
+      console.log(companies)
       dispatch({
         type: SET_COMPANY,
         company: companies.data,
@@ -80,8 +79,14 @@ export default function Header(props) {
       style={{ borderBottom: "2px solid black" }}
     >
       <Toolbar className={classes.container}>
-        <div style={{display:"flex", width: "100%", justifyContent:"space-between"}}>
-          <div style={{display:"flex", alignItems:"center"}}>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
             <Dropdown
               data={state.company}
               label="Company"
@@ -90,6 +95,26 @@ export default function Header(props) {
               handleChg={handleChg}
               isDisabled={isDisabled}
             />
+
+            <Link
+              to={{
+                pathname: `/admin/companyprofile/create`,
+                state: { state: "create" },
+              }}
+            >
+              <Button
+                style={{
+                  marginRight: "1em",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+                variant="contained"
+                color="primary"
+              >
+                {" "}
+                Create Company{" "}
+              </Button>
+            </Link>
             <Button
               style={{
                 marginRight: "1em",
@@ -104,13 +129,13 @@ export default function Header(props) {
             </Button>
           </div>
 
-          <div style={{alignSelf:"center"}}>    
-          <Button variant="contained" color="primary">
-            {" "}
-            Logout{" "}
-          </Button>
+          <div style={{ alignSelf: "center" }}>
+            <Button variant="contained" color="primary">
+              {" "}
+              Logout{" "}
+            </Button>
           </div>
-        </div> 
+        </div>
       </Toolbar>
     </AppBar>
   );

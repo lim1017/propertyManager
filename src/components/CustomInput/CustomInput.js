@@ -23,7 +23,9 @@ export default function CustomInput(props) {
     labelProps,
     inputProps,
     error,
-    success
+    success,
+    value,
+    handleChange
   } = props;
 
   const labelClasses = classNames({
@@ -38,6 +40,7 @@ export default function CustomInput(props) {
   const marginTop = classNames({
     [classes.marginTop]: labelText === undefined
   });
+
   return (
     <FormControl
       {...formControlProps}
@@ -59,6 +62,8 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
+        value={value}
+        onChange={(e)=>handleChange(e, id)}
         {...inputProps}
       />
       {error ? (

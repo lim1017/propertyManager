@@ -22,6 +22,8 @@ import useAppData from "../hooks/useAppData";
 import styles2 from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
 import {PropertyDetails} from "../views/PropertyDetails/PropertyDetails"
+import CompanyProfile from "../views/CompanyProfile/CompanyProfile"
+import CreateCompanyProfile from "../views/CompanyProfile/CreateCompanyProfile"
 
 
 import {
@@ -59,6 +61,10 @@ const switchRoutes = (
   <Switch>
 
 <Route path="/admin/property/:id" component={PropertyDetails} />
+<Route path="/admin/companyprofile/create" component={CompanyProfile} />
+{/* <Route path="/admin/companyprofile/:id" component={CompanyProfile} /> */}
+
+
 {/* <Route path="/admin/createproperty/" component={CreateProperty} /> */}
 
 
