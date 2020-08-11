@@ -44,6 +44,10 @@ export default function reducerz(state, action) {
   }
 }
 
+
+
+
+
 export const fetchActiveUser = (dispatch) => {
   return async (userId) => {
       const user = await propertyAPI.get("/users");
@@ -55,6 +59,7 @@ export const fetchProperties = (dispatch) => {
   return async (activeCompany) => {
 
     const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
+
     dispatch({ type: SET_PROPERTIES, properties: properties.data });
 
 
@@ -76,8 +81,24 @@ export const createCompany = (dispatch) => {
   };
 };
 
+export const editCompany = (dispatch) => {
+  console.log('inside editing company')
+  return async (companyDetails, userId) => {
+    await propertyAPI.patch(`/company/edit/${companyDetails.company_id}`, { ...companyDetails, userId });
+  };
+};
+
+export const setActiveCompany = (dispatch) => {
+  return async (activeCompany) => {
+    console.log(activeCompany, 'setting active company')
+    dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: activeCompany });
+
+  };
+};
+
+
 export const { Context, Provider } = createDataContext(
   reducerz,
-  { fetchCompanies, createCompany, fetchActiveUser, fetchProperties },
+  { fetchCompanies, createCompany, fetchActiveUser, fetchProperties, editCompany, setActiveCompany },
   {}
 );

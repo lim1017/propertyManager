@@ -44,17 +44,11 @@ const useStyles = makeStyles(styles);
 
 export default function CompanyProfile(props) {
   const context = useContext(Context);
-  const { state, dispatch, fetchCompanies, createCompany } = context;
+  const { state, dispatch, fetchCompanies, createCompany, editCompany, setActiveCompany } = context;
 
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
-  const [companyDetails, setCompanyDetails] = useState(isEditing ? {}: {
-    name:"",
-    email:"",
-    address: {address:"", city:"", country:"", postal:""},
-    contact: {firstName:"", lastName:"", personalEmail:"", phone1:"", phone2:""},
-    notes:""
-  } );
+  const [companyDetails, setCompanyDetails] = useState({});
   const [loading, setLoading] = useState(isEditing ? true: false);
 
   const activeUser = state.user.user_id;
@@ -68,11 +62,9 @@ export default function CompanyProfile(props) {
       const activeCompany = state.company.filter((comp) => {
         return comp.name === state.activeCompany;
       });
-      console.log(activeCompany[0]);
       const details = await propertyAPI.get(
         `/company/${activeUser}&${activeCompany[0].company_id}`
       );
-      console.log(details);
       setCompanyDetails(details.data[0]);
       setLoading(false)
 
@@ -86,10 +78,8 @@ export default function CompanyProfile(props) {
 
   }, []);
 
-  console.log(companyDetails);
 
   const handleChange = (e, id) => {
-    console.log(id)
 
     if (id === "city" || id === "country" || id === "postal" || id === "address"){
       setCompanyDetails({ ...companyDetails, address:{...companyDetails.address, [id]: e.target.value} });
@@ -108,6 +98,13 @@ export default function CompanyProfile(props) {
         activeCompany: companyDetails.companyName,
       });
       props.history.push("/admin/dashboard");
+    } else{
+
+      await editCompany(companyDetails, activeUser)
+      await fetchCompanies(activeUser);
+      setActiveCompany(companyDetails.name)
+      props.history.push("/admin/dashboard");
+
     }
   };
 
@@ -163,7 +160,7 @@ export default function CompanyProfile(props) {
                     // labelText="Address"
                     id="address"
                     handleChange={handleChange}
-                    value={companyDetails.address.address}
+                    value={companyDetails?.address?.address}
                     formControlProps={{
                       fullWidth: true,
                     }}
@@ -181,7 +178,7 @@ export default function CompanyProfile(props) {
                     // labelText="City"
                     id="city"
                     handleChange={handleChange}
-                    value={companyDetails.address.city}
+                    value={companyDetails?.address?.city}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -194,7 +191,7 @@ export default function CompanyProfile(props) {
                     // labelText="Country"
                     id="country"
                     handleChange={handleChange}
-                    value={companyDetails.address.country}
+                    value={companyDetails?.address?.country}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -207,7 +204,7 @@ export default function CompanyProfile(props) {
                     // labelText="Postal Code"
                     id="postal"
                     handleChange={handleChange}
-                    value={companyDetails.address.postal}
+                    value={companyDetails?.address?.postal}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -231,7 +228,7 @@ export default function CompanyProfile(props) {
                     // labelText="First Name"
                     id="firstName"
                     handleChange={handleChange}
-                    value={companyDetails.contact.firstName}
+                    value={companyDetails?.contact?.firstName}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -244,7 +241,7 @@ export default function CompanyProfile(props) {
                     // labelText="Last Name"
                     id="lastName"
                     handleChange={handleChange}
-                    value={companyDetails.contact.lastName}
+                    value={companyDetails?.contact?.lastName}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -259,7 +256,7 @@ export default function CompanyProfile(props) {
                     // labelText="Title"
                     id="title"
                     handleChange={handleChange}
-                    value={companyDetails.contact.title}
+                    value={companyDetails?.contact?.title}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -272,7 +269,7 @@ export default function CompanyProfile(props) {
                     // labelText="Email"
                     id="personalEmail"
                     handleChange={handleChange}
-                    value={companyDetails.contact.personalEmail}
+                    value={companyDetails?.contact?.personalEmail}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -288,7 +285,7 @@ export default function CompanyProfile(props) {
                     // labelText="Phone #1"
                     id="phone1"
                     handleChange={handleChange}
-                    value={companyDetails.contact.phone1}
+                    value={companyDetails?.contact?.phone1}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },
@@ -301,7 +298,7 @@ export default function CompanyProfile(props) {
                     // labelText="Phone #2"
                     id="phone2"
                     handleChange={handleChange}
-                    value={companyDetails.contact.phone2}
+                    value={companyDetails?.contact?.phone2}
                     formControlProps={{
                       fullWidth: true,
                       style: { marginTop: 0 },

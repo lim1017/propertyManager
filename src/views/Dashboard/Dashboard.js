@@ -29,6 +29,22 @@ export default function Dashboard(props) {
     await fetchProperties(activeCompany)
   }
 
+
+  function sortObj(a, b) {
+    // Use toUpperCase() to ignore character casing
+    const company1 = a.company_id
+    const company2 = b.company_id
+  
+    let comparison = 0;
+    if (company1 > company2) {
+      comparison = 1;
+    } else if (company1 < company2) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
+
   useEffect(() => {
     async function fetchData() {
       const user = await propertyAPI.get("/users");
@@ -36,9 +52,13 @@ export default function Dashboard(props) {
 
       const userID = user.data[0].user_id;
       const companies = await propertyAPI.get(`/companies/${userID}`);
+
+      const sortedCompanies=companies.data.sort(sortObj)
+
+
       dispatch({
         type: SET_COMPANY,
-        company: companies.data,
+        company: sortedCompanies,
         activeCompany: state.activeCompany
           ? state.activeCompany
           : companies.data[0].name,
