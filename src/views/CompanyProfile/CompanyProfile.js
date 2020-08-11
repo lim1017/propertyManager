@@ -15,6 +15,10 @@ import CardFooter from "components/Card/CardFooter.js";
 import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI"
 import appDataContext from "../../hooks/useContext";
+import {
+  SET_ACTIVE_COMPANY,
+  SET_COMPANY
+} from "../../hooks/reducers/appDataReducer";
 
 
 const styles = {
@@ -40,7 +44,6 @@ const useStyles = makeStyles(styles);
 
 export default function CompanyProfile(props) {
   const { state, dispatch } = useContext(appDataContext);
-  console.log(state)
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
 
@@ -53,11 +56,13 @@ export default function CompanyProfile(props) {
 
   const handleSubmit= async ()=>{
     const activeUser=state.user.user_id
-    console.log(activeUser)
     if (!editState){
       await propertyAPI.post('/company/create', {...companyDetails, activeUser})
-      .then(function (response) {
-        console.log(response);
+      .then(async function (response) {
+        const companies = await propertyAPI.get(`/companies/${activeUser}`);
+        dispatch({type: SET_COMPANY, company: companies.data});
+        dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: companyDetails.companyName })
+        props.history.push("/admin/dashboard")
       })
       .catch(function (error) {
         console.log(error);

@@ -63,15 +63,24 @@ export default function Header(props) {
   //   fetchData();
   // }, []);
 
-  useEffect(() => {
-    async function updateProperties() {
-      const companyID = state.activeCompany;
-      const properties = await propertyAPI.get(`/properties/${companyID}`);
-      dispatch({ type: SET_PROPERTIES, properties: properties.data });
-    }
+  // useEffect(() => {
 
-    updateProperties();
-  }, [state.activeCompany]);
+  //   async function updateProperties() {
+  //     console.log(state)
+  //     // const companyID = state.activeCompany;
+  //     const activeCompany=state.company.filter(comp =>{
+  //       return comp.name===state.activeCompany
+  //     })
+  //     console.log(activeCompany[0])
+  //     const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
+  //     dispatch({ type: SET_PROPERTIES, properties: properties.data });
+  //   }
+
+  //   if(state.activeCompany){
+  //     updateProperties();
+  //   }
+  
+  // }, [state.activeCompany]);
 
   return (
     <AppBar

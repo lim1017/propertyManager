@@ -9,6 +9,7 @@ import {
   SET_PROPERTIES,
   SET_LOADING,
   SET_USER,
+  SET_ACTIVE_COMPANY
 } from "../../hooks/reducers/appDataReducer";
 import BasicCardPicture from "../../components/Card/BasicCardPicture";
 import propertyAPI from "../../apis//propertyManagerAPI";
@@ -16,14 +17,24 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 
 const useStyles = makeStyles(styles);
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const { state, dispatch } = useContext(appDataContext);
 
 
-  console.log(state)
+  async function updateProperties() {
+    console.log(state)
+    // const companyID = state.activeCompany;
+    const activeCompany=state.company.filter(comp =>{
+      return comp.name===state.activeCompany
+    })
+    console.log(activeCompany[0])
+    const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
+    dispatch({ type: SET_PROPERTIES, properties: properties.data });
+  }
 
   useEffect(() => {
     async function fetchData() {
+      console.log('inside fetching')
       const user = await propertyAPI.get("/users");
       dispatch({ type: SET_USER, user: user.data[0] });
 
@@ -34,16 +45,25 @@ export default function Dashboard() {
         company: companies.data,
         activeCompany: state.activeCompany
           ? state.activeCompany
-          : companies.data[0].company_id,
+          : companies.data[0].name,
       });
 
-      const companyID = companies.data[0].company_id;
-      const properties = await propertyAPI.get(`/properties/${companyID}`);
-      dispatch({ type: SET_PROPERTIES, properties: properties.data });
+      if(state.activeCompany){
+        updateProperties();
+      }   
     }
 
     fetchData();
+
   }, []);
+
+  useEffect(() => {
+
+    if(state.activeCompany){
+      updateProperties();
+    }
+  
+  }, [state.activeCompany]);
 
 
   const classes = useStyles();

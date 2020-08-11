@@ -34,7 +34,7 @@ const Dropdown = ({ data, label, handleChg, value, isDisabled }) => {
           onChange={handleChg}
         >
           {data ? data.map((element) => {
-                return <MenuItem value={element.company_id}>{element.name}</MenuItem>;
+                return <MenuItem value={element.name}>{element.name}</MenuItem>;
               })
             : null}
         </Select>
