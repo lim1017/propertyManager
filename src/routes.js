@@ -50,7 +50,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/company",
+    path: '/company',
     name: "Company Profile",
     rtlName: "لوحة القيادة",
     icon: Business,

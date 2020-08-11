@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -14,6 +14,8 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI"
+import appDataContext from "../../hooks/useContext";
+
 
 const styles = {
   cardCategoryWhite: {
@@ -37,6 +39,8 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function CompanyProfile(props) {
+  const { state, dispatch } = useContext(appDataContext);
+  console.log(state)
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
 
@@ -48,9 +52,10 @@ export default function CompanyProfile(props) {
   }
 
   const handleSubmit= async ()=>{
-    console.log('submit')
+    const activeUser=state.user.user_id
+    console.log(activeUser)
     if (!editState){
-      await propertyAPI.post('/company/create', companyDetails)
+      await propertyAPI.post('/company/create', {...companyDetails, activeUser})
       .then(function (response) {
         console.log(response);
       })

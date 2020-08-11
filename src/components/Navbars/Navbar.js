@@ -39,29 +39,29 @@ export default function Header(props) {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      const user = await propertyAPI.get("/users");
-      dispatch({ type: SET_USER, user: user.data[0] });
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const user = await propertyAPI.get("/users");
+  //     dispatch({ type: SET_USER, user: user.data[0] });
 
-      const userID = user.data[0].user_id;
-      const companies = await propertyAPI.get(`/companies/${userID}`);
-      console.log(companies)
-      dispatch({
-        type: SET_COMPANY,
-        company: companies.data,
-        activeCompany: state.activeCompany
-          ? state.activeCompany
-          : companies.data[0].company_id,
-      });
+  //     const userID = user.data[0].user_id;
+  //     const companies = await propertyAPI.get(`/companies/${userID}`);
+  //     console.log(companies)
+  //     dispatch({
+  //       type: SET_COMPANY,
+  //       company: companies.data,
+  //       activeCompany: state.activeCompany
+  //         ? state.activeCompany
+  //         : companies.data[0].company_id,
+  //     });
 
-      const companyID = companies.data[0].company_id;
-      const properties = await propertyAPI.get(`/properties/${companyID}`);
-      dispatch({ type: SET_PROPERTIES, properties: properties.data });
-    }
+  //     const companyID = companies.data[0].company_id;
+  //     const properties = await propertyAPI.get(`/properties/${companyID}`);
+  //     dispatch({ type: SET_PROPERTIES, properties: properties.data });
+  //   }
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     async function updateProperties() {

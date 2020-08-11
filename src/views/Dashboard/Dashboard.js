@@ -20,6 +20,30 @@ export default function Dashboard() {
   const { state, dispatch } = useContext(appDataContext);
 
 
+  console.log(state)
+
+  useEffect(() => {
+    async function fetchData() {
+      const user = await propertyAPI.get("/users");
+      dispatch({ type: SET_USER, user: user.data[0] });
+
+      const userID = user.data[0].user_id;
+      const companies = await propertyAPI.get(`/companies/${userID}`);
+      dispatch({
+        type: SET_COMPANY,
+        company: companies.data,
+        activeCompany: state.activeCompany
+          ? state.activeCompany
+          : companies.data[0].company_id,
+      });
+
+      const companyID = companies.data[0].company_id;
+      const properties = await propertyAPI.get(`/properties/${companyID}`);
+      dispatch({ type: SET_PROPERTIES, properties: properties.data });
+    }
+
+    fetchData();
+  }, []);
 
 
   const classes = useStyles();
