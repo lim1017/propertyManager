@@ -44,17 +44,40 @@ export default function reducerz(state, action) {
   }
 }
 
+export const fetchActiveUser = (dispatch) => {
+  return async (userId) => {
+      const user = await propertyAPI.get("/users");
+      await dispatch({ type: SET_USER, user: user.data[0] });
+  };
+};
+
+export const fetchProperties = (dispatch) => {
+  return async (activeCompany) => {
+
+    const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
+    dispatch({ type: SET_PROPERTIES, properties: properties.data });
+
+
+  };
+};
+
+
+
 export const fetchCompanies = (dispatch) => {
-console.log('???')
   return async (userId) => {
     const companies = await propertyAPI.get(`/companies/${userId}`);
-    console.log(companies);
-    dispatch({ type: SET_COMPANY, company: companies.data });
+    await dispatch({ type: SET_COMPANY, company: companies.data });
+  };
+};
+
+export const createCompany = (dispatch) => {
+  return async (companyDetails, userId) => {
+    await propertyAPI.post("/company/create", { ...companyDetails, userId });
   };
 };
 
 export const { Context, Provider } = createDataContext(
   reducerz,
-  { fetchCompanies },
+  { fetchCompanies, createCompany, fetchActiveUser, fetchProperties },
   {}
 );

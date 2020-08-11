@@ -45,7 +45,7 @@ const useStyles = makeStyles(styles);
 export default function CompanyProfile(props) {
 
   const context = useContext(Context);
-  const { state, dispatch, fetchCompanies } = context;
+  const { state, dispatch, fetchCompanies, createCompany } = context;
 
 
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
@@ -62,19 +62,14 @@ export default function CompanyProfile(props) {
     const activeUser=state.user.user_id
     if (!editState){
 
-      await propertyAPI.post('/company/create', {...companyDetails, activeUser})
-      .then(async function (response) {
-        await fetchCompanies(activeUser)
-        // const companies = await propertyAPI.get(`/companies/${activeUser}`);
-        // dispatch({ type: SET_COMPANY, company: companies.data });
-        
-      }).then(()=>{
-        dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: companyDetails.companyName })
-        props.history.push("/admin/dashboard")
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+      await createCompany(companyDetails, activeUser)
+      await fetchCompanies(activeUser)
+
+      dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: companyDetails.companyName })
+      props.history.push("/admin/dashboard")
+
+  
     }
   }
 

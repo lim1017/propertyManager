@@ -19,16 +19,14 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
   const context = useContext(Context);
-  const { state, dispatch, fetchCompanies } = context
+  const { state, dispatch, fetchProperties } = context
 
 
   async function updateProperties() {
-    // const companyID = state.activeCompany;
     const activeCompany=state.company.filter(comp =>{
       return comp.name===state.activeCompany
     })
-    const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
-    dispatch({ type: SET_PROPERTIES, properties: properties.data });
+    await fetchProperties(activeCompany)
   }
 
   useEffect(() => {

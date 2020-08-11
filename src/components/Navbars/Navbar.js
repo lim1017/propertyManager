@@ -12,14 +12,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import {Context} from "../../hooks/reducers/appDataReducer";
 import {
   SET_ACTIVE_COMPANY,
-  SET_PROPERTIES,
-  SET_DATA,
-  SET_COMPANY,
-  SET_TENANTS,
-  SET_LOADING,
-  SET_USER,
 } from "../../hooks/reducers/appDataReducer";
-import propertyAPI from "../../apis//propertyManagerAPI";
 
 const useStyles = makeStyles(styles);
 
@@ -39,49 +32,6 @@ export default function Header(props) {
   const handleChg = (e) => {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
   };
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const user = await propertyAPI.get("/users");
-  //     dispatch({ type: SET_USER, user: user.data[0] });
-
-  //     const userID = user.data[0].user_id;
-  //     const companies = await propertyAPI.get(`/companies/${userID}`);
-  //     console.log(companies)
-  //     dispatch({
-  //       type: SET_COMPANY,
-  //       company: companies.data,
-  //       activeCompany: state.activeCompany
-  //         ? state.activeCompany
-  //         : companies.data[0].company_id,
-  //     });
-
-  //     const companyID = companies.data[0].company_id;
-  //     const properties = await propertyAPI.get(`/properties/${companyID}`);
-  //     dispatch({ type: SET_PROPERTIES, properties: properties.data });
-  //   }
-
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-
-  //   async function updateProperties() {
-  //     console.log(state)
-  //     // const companyID = state.activeCompany;
-  //     const activeCompany=state.company.filter(comp =>{
-  //       return comp.name===state.activeCompany
-  //     })
-  //     console.log(activeCompany[0])
-  //     const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
-  //     dispatch({ type: SET_PROPERTIES, properties: properties.data });
-  //   }
-
-  //   if(state.activeCompany){
-  //     updateProperties();
-  //   }
-  
-  // }, [state.activeCompany]);
 
   return (
     <AppBar
