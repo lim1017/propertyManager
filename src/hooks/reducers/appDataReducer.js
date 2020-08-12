@@ -1,5 +1,6 @@
 import propertyAPI from "../../apis/propertyManagerAPI";
 import createDataContext from "../useContext";
+import { sortObj } from "../../helperFunctions";
 
 export const SET_DATA = "SET_DATA";
 export const SET_COMPANY = "SET_COMPANY";
@@ -9,13 +10,12 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_ACTIVE_COMPANY = "SET_ACTIVE_COMPANY";
 export const SET_USER = "SET_USER";
 
-
 export default function reducerz(state, action) {
   switch (action.type) {
-    case SET_DATA: 
+    case SET_DATA:
       return {
-        ...state
-      }
+        ...state,
+      };
     case SET_USER:
       return {
         ...state,
@@ -50,28 +50,40 @@ export default function reducerz(state, action) {
 }
 
 export const fetchData = (dispatch) => {
-  return async (userId) => {
+  return async (state) => {
+    const user = await propertyAPI.get("/users");
+    await dispatch({ type: SET_USER, user: user.data[0] });
 
-  }
-}
+    const userID = user.data[0].user_id;
+    const companies = await propertyAPI.get(`/companies/${userID}`);
 
+    const sortedCompanies = companies.data.sort(sortObj);
 
+    await dispatch({
+      type: SET_COMPANY,
+      company: sortedCompanies,
+      activeCompany: state.activeCompany
+        ? state.activeCompany
+        : companies.data[0].name,
+    });
+  };
+};
 
 export const fetchActiveUser = (dispatch) => {
   return async (userId) => {
-      const user = await propertyAPI.get("/users");
-      await dispatch({ type: SET_USER, user: user.data[0] });
+    const user = await propertyAPI.get("/users");
+    await dispatch({ type: SET_USER, user: user.data[0] });
   };
 };
 
 export const fetchProperties = (dispatch) => {
   return async (activeCompany) => {
-    const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
+    const properties = await propertyAPI.get(
+      `/properties/${activeCompany[0].company_id}`
+    );
     dispatch({ type: SET_PROPERTIES, properties: properties.data });
   };
 };
-
-
 
 export const fetchCompanies = (dispatch) => {
   return async (userId) => {
@@ -88,23 +100,38 @@ export const createCompany = (dispatch) => {
 
 export const editCompany = (dispatch) => {
   return async (companyDetails, userId) => {
-
-    console.log(companyDetails)
-
-    await propertyAPI.patch(`/company/edit/${companyDetails.company_id}`, { ...companyDetails, userId });
+    await propertyAPI.patch(`/company/edit/${companyDetails.company_id}`, {
+      ...companyDetails,
+      userId,
+    });
   };
 };
+
+
+export const createProperty = (dispatch) => {
+  return async (propertyDetails, activeCompanyId) => {
+    await propertyAPI.post("/property/create", { ...propertyDetails, activeCompanyId });
+  };
+};
+
 
 export const setActiveCompany = (dispatch) => {
   return async (activeCompany) => {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: activeCompany });
-
   };
 };
 
-
 export const { Context, Provider } = createDataContext(
   reducerz,
-  { fetchCompanies, createCompany, fetchActiveUser, fetchProperties, editCompany, setActiveCompany, fetchData },
+  {
+    fetchCompanies,
+    createCompany,
+    fetchActiveUser,
+    fetchProperties,
+    editCompany,
+    setActiveCompany,
+    fetchData,
+    createProperty,
+  },
   {}
 );

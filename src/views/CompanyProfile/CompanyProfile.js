@@ -51,6 +51,8 @@ export default function CompanyProfile(props) {
     createCompany,
     editCompany,
     setActiveCompany,
+    fetchData,
+    fetchProperties,
   } = context;
 
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
@@ -58,12 +60,32 @@ export default function CompanyProfile(props) {
   const [companyDetails, setCompanyDetails] = useState({});
   const [loading, setLoading] = useState(isEditing ? true : false);
 
-  const activeUser = localStorage.getItem("id")
+  const activeUser = localStorage.getItem("id");
+
+  async function updateProperties() {
+    const activeCompany = state.company.filter((comp) => {
+      return comp.name === state.activeCompany;
+    });
+    await fetchProperties(activeCompany);
+  }
+
+  useEffect(() => {
+    if (editState) {
+      setLoading(true);
+    }
+
+    async function fetchData4App() {
+      await fetchData(state);
+      if (state.activeCompany) {
+        await updateProperties();
+      }
+    }
+    fetchData4App();
+  }, []);
 
   useEffect(() => {
     async function getCompanyDetails() {
       setLoading(true);
-
       const activeCompany = state.company.filter((comp) => {
         return comp.name === state.activeCompany;
       });
@@ -74,10 +96,10 @@ export default function CompanyProfile(props) {
       setLoading(false);
     }
 
-    if (editState) {
+    if (editState && state.company) {
       getCompanyDetails();
     }
-  }, []);
+  }, [state.company]);
 
   const handleChange = (e, id) => {
     if (

@@ -31,31 +31,14 @@ export default function Dashboard(props) {
 
   // localStorage.setItem("id", user.data[0].user_id);
 
-
   useEffect(() => {
-    async function fetchData() {
-      const user = await propertyAPI.get("/users");
-      dispatch({ type: SET_USER, user: user.data[0] });
-
-      const userID = user.data[0].user_id;
-      const companies = await propertyAPI.get(`/companies/${userID}`);
-
-      const sortedCompanies = companies.data.sort(sortObj);
-
-      dispatch({
-        type: SET_COMPANY,
-        company: sortedCompanies,
-        activeCompany: state.activeCompany
-          ? state.activeCompany
-          : companies.data[0].name,
-      });
-
+    async function fetchData4App() {
+      fetchData(state)
       if (state.activeCompany) {
         updateProperties();
       }
     }
-
-    fetchData();
+    fetchData4App();
   }, []);
 
   console.log(state)

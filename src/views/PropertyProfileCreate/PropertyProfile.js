@@ -51,33 +51,56 @@ export default function CompanyProfile(props) {
     createCompany,
     editCompany,
     setActiveCompany,
+    fetchData,
+    fetchProperties,
+    createProperty,
   } = context;
 
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
-  const [companyDetails, setCompanyDetails] = useState({});
+  const [propertyDetails, setpropertyDetails] = useState({});
   const [loading, setLoading] = useState(isEditing ? true : false);
 
-  const activeUser = state.user.user_id;
+  const activeUser = localStorage.getItem("id");
+
+  async function updateProperties() {
+    const activeCompany = state.company.filter((comp) => {
+      return comp.name === state.activeCompany;
+    });
+    await fetchProperties(activeCompany);
+  }
 
   useEffect(() => {
-    async function getCompanyDetails() {
+    if (editState) {
       setLoading(true);
+    }
 
+    async function fetchData4App() {
+      await fetchData(state);
+      if (state.activeCompany) {
+        await updateProperties();
+      }
+    }
+    fetchData4App();
+  }, []);
+
+  useEffect(() => {
+    async function getpropertyDetails() {
+      setLoading(true);
       const activeCompany = state.company.filter((comp) => {
         return comp.name === state.activeCompany;
       });
       const details = await propertyAPI.get(
         `/company/${activeUser}&${activeCompany[0].company_id}`
       );
-      setCompanyDetails(details.data[0]);
+      setpropertyDetails(details.data[0]);
       setLoading(false);
     }
 
-    if (editState) {
-      getCompanyDetails();
+    if (editState && state.company) {
+      getpropertyDetails();
     }
-  }, []);
+  }, [state.company]);
 
   const handleChange = (e, id) => {
     if (
@@ -86,9 +109,9 @@ export default function CompanyProfile(props) {
       id === "postal" ||
       id === "address"
     ) {
-      setCompanyDetails({
-        ...companyDetails,
-        address: { ...companyDetails.address, [id]: e.target.value },
+      setpropertyDetails({
+        ...propertyDetails,
+        address: { ...propertyDetails.address, [id]: e.target.value },
       });
     } else if (
       id === "firstName" ||
@@ -98,27 +121,33 @@ export default function CompanyProfile(props) {
       id === "personalEmail" ||
       id === "title"
     ) {
-      setCompanyDetails({
-        ...companyDetails,
-        contact: { ...companyDetails.contact, [id]: e.target.value },
+      setpropertyDetails({
+        ...propertyDetails,
+        manager: { ...propertyDetails.manager, [id]: e.target.value },
       });
-    } else setCompanyDetails({ ...companyDetails, [id]: e.target.value });
+    } else setpropertyDetails({ ...propertyDetails, [id]: e.target.value });
   };
 
   const handleSubmit = async () => {
-    if (!editState) {
-      await createCompany(companyDetails, activeUser);
-      await fetchCompanies(activeUser);
+    if (!editState) { //create
 
-      dispatch({
-        type: SET_ACTIVE_COMPANY,
-        activeCompany: companyDetails.companyName,
+      const activeCompany = state.company.filter((comp) => {
+        return comp.name === state.activeCompany;
       });
+      console.log(activeCompany)
+
+      await createProperty(propertyDetails, activeCompany[0].company_id);
+      await fetchProperties(activeCompany);
+
+      // dispatch({
+      //   type: SET_ACTIVE_COMPANY,
+      //   activeCompany: propertyDetails.companyName,
+      // });
       props.history.push("/admin/dashboard");
     } else {
-      await editCompany(companyDetails, activeUser);
+      await editCompany(propertyDetails, activeUser);
       await fetchCompanies(activeUser);
-      setActiveCompany(companyDetails.name);
+      setActiveCompany(propertyDetails.name);
       props.history.push("/admin/dashboard");
     }
   };
@@ -135,8 +164,8 @@ export default function CompanyProfile(props) {
               <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>
                   {editState
-                    ? "Edit Company Profile"
-                    : "Create Company Profile"}{" "}
+                    ? "Edit Property Profile"
+                    : "Create Property Profile"}{" "}
                 </h4>
                 <p className={classes.cardCategoryWhite}>
                   Complete your profile
@@ -150,7 +179,7 @@ export default function CompanyProfile(props) {
                       // labelText="Company Name"
                       id="name"
                       handleChange={handleChange}
-                      value={companyDetails.name}
+                      value={propertyDetails.name}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -159,15 +188,46 @@ export default function CompanyProfile(props) {
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={5}>
-                    <InputLabel>Email address</InputLabel>
+                    <InputLabel>Property Type</InputLabel>
                     <CustomInput
                       // labelText="Email address"
-                      id="email"
+                      id="type"
                       handleChange={handleChange}
-                      value={companyDetails.email}
+                      value={propertyDetails.type}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={2}>
+                    <InputLabel># of Units</InputLabel>
+                    <CustomInput
+                      // labelText="Email address"
+                      id="units"
+                      handleChange={handleChange}
+                      value={propertyDetails.units}
+                      formControlProps={{
+                        fullWidth: true,
+                        style: { marginTop: 0 },
+                      }}
+                    />
+                  </GridItem>
+                </GridContainer>
+
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={8}>
+                    <InputLabel>Image Url</InputLabel>
+                    <CustomInput
+                      // labelText="Address"
+                      id="image"
+                      handleChange={handleChange}
+                      value={propertyDetails.image}
+                      formControlProps={{
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        style: { width: "100%", marginTop: 0 },
                       }}
                     />
                   </GridItem>
@@ -180,7 +240,7 @@ export default function CompanyProfile(props) {
                       // labelText="Address"
                       id="address"
                       handleChange={handleChange}
-                      value={companyDetails?.address?.address}
+                      value={propertyDetails?.address?.address}
                       formControlProps={{
                         fullWidth: true,
                       }}
@@ -198,7 +258,7 @@ export default function CompanyProfile(props) {
                       // labelText="City"
                       id="city"
                       handleChange={handleChange}
-                      value={companyDetails?.address?.city}
+                      value={propertyDetails?.address?.city}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -211,7 +271,7 @@ export default function CompanyProfile(props) {
                       // labelText="Country"
                       id="country"
                       handleChange={handleChange}
-                      value={companyDetails?.address?.country}
+                      value={propertyDetails?.address?.country}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -224,7 +284,7 @@ export default function CompanyProfile(props) {
                       // labelText="Postal Code"
                       id="postal"
                       handleChange={handleChange}
-                      value={companyDetails?.address?.postal}
+                      value={propertyDetails?.address?.postal}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -242,7 +302,7 @@ export default function CompanyProfile(props) {
                         fontSize: "18px",
                       }}
                     >
-                      Contact Information:
+                      Management Contact:
                     </div>
                   </GridItem>
                 </GridContainer>
@@ -254,7 +314,7 @@ export default function CompanyProfile(props) {
                       // labelText="First Name"
                       id="firstName"
                       handleChange={handleChange}
-                      value={companyDetails?.contact?.firstName}
+                      value={propertyDetails?.manager?.firstName}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -267,7 +327,7 @@ export default function CompanyProfile(props) {
                       // labelText="Last Name"
                       id="lastName"
                       handleChange={handleChange}
-                      value={companyDetails?.contact?.lastName}
+                      value={propertyDetails?.manager?.lastName}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -282,7 +342,7 @@ export default function CompanyProfile(props) {
                       // labelText="Title"
                       id="title"
                       handleChange={handleChange}
-                      value={companyDetails?.contact?.title}
+                      value={propertyDetails?.manager?.title}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -295,7 +355,7 @@ export default function CompanyProfile(props) {
                       // labelText="Email"
                       id="personalEmail"
                       handleChange={handleChange}
-                      value={companyDetails?.contact?.personalEmail}
+                      value={propertyDetails?.manager?.personalEmail}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -311,7 +371,7 @@ export default function CompanyProfile(props) {
                       // labelText="Phone #1"
                       id="phone1"
                       handleChange={handleChange}
-                      value={companyDetails?.contact?.phone1}
+                      value={propertyDetails?.manager?.phone1}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -324,7 +384,7 @@ export default function CompanyProfile(props) {
                       // labelText="Phone #2"
                       id="phone2"
                       handleChange={handleChange}
-                      value={companyDetails?.contact?.phone2}
+                      value={propertyDetails?.manager?.phone2}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -336,13 +396,13 @@ export default function CompanyProfile(props) {
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <InputLabel style={{ color: "#AAAAAA" }}>
-                      About/Notes:
+                      Description
                     </InputLabel>
                     <CustomInput
                       // labelText="Tell us about this company"
-                      id="notes"
+                      id="description"
                       handleChange={handleChange}
-                      value={companyDetails.notes}
+                      value={propertyDetails.notes}
                       formControlProps={{
                         fullWidth: true,
                       }}
