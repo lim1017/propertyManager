@@ -75,6 +75,13 @@ export default function Header(props) {
                 Create Company{" "}
               </Button>
             </Link>
+
+            <Link
+              to={{
+                pathname: `/admin/propertyprofile/create`,
+                state: { state: "create" },
+              }}
+            >
             <Button
               style={{
                 marginRight: "1em",
@@ -87,6 +94,7 @@ export default function Header(props) {
               {" "}
               Add Property{" "}
             </Button>
+            </Link>
           </div>
 
           <div style={{ alignSelf: "center" }}>
