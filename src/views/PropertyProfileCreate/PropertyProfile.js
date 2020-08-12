@@ -134,7 +134,6 @@ export default function CompanyProfile(props) {
       const activeCompany = state.company.filter((comp) => {
         return comp.name === state.activeCompany;
       });
-      console.log(activeCompany)
 
       await createProperty(propertyDetails, activeCompany[0].company_id);
       await fetchProperties(activeCompany);
@@ -151,6 +150,8 @@ export default function CompanyProfile(props) {
       props.history.push("/admin/dashboard");
     }
   };
+
+  console.log(propertyDetails)
 
   const classes = useStyles();
   return (

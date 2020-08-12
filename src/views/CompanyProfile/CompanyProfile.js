@@ -90,7 +90,7 @@ export default function CompanyProfile(props) {
         return comp.name === state.activeCompany;
       });
       const details = await propertyAPI.get(
-        `/company/${activeUser}&${activeCompany[0].company_id}`
+        `/company/${activeUser}&${activeCompany[0]?.company_id}`
       );
       setCompanyDetails(details.data[0]);
       setLoading(false);
@@ -144,6 +144,7 @@ export default function CompanyProfile(props) {
       props.history.push("/admin/dashboard");
     }
   };
+
 
   const classes = useStyles();
   return (
