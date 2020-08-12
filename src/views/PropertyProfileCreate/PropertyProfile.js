@@ -58,7 +58,7 @@ export default function CompanyProfile(props) {
   const [companyDetails, setCompanyDetails] = useState({});
   const [loading, setLoading] = useState(isEditing ? true : false);
 
-  const activeUser = localStorage.getItem("id")
+  const activeUser = state.user.user_id;
 
   useEffect(() => {
     async function getCompanyDetails() {
@@ -145,7 +145,7 @@ export default function CompanyProfile(props) {
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={5}>
-                    <InputLabel>Company Name</InputLabel>
+                    <InputLabel>Property Name</InputLabel>
                     <CustomInput
                       // labelText="Company Name"
                       id="name"

@@ -9,8 +9,13 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_ACTIVE_COMPANY = "SET_ACTIVE_COMPANY";
 export const SET_USER = "SET_USER";
 
+
 export default function reducerz(state, action) {
   switch (action.type) {
+    case SET_DATA: 
+      return {
+        ...state
+      }
     case SET_USER:
       return {
         ...state,
@@ -44,7 +49,11 @@ export default function reducerz(state, action) {
   }
 }
 
+export const fetchData = (dispatch) => {
+  return async (userId) => {
 
+  }
+}
 
 
 
@@ -57,12 +66,8 @@ export const fetchActiveUser = (dispatch) => {
 
 export const fetchProperties = (dispatch) => {
   return async (activeCompany) => {
-
     const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
-
     dispatch({ type: SET_PROPERTIES, properties: properties.data });
-
-
   };
 };
 
@@ -99,6 +104,6 @@ export const setActiveCompany = (dispatch) => {
 
 export const { Context, Provider } = createDataContext(
   reducerz,
-  { fetchCompanies, createCompany, fetchActiveUser, fetchProperties, editCompany, setActiveCompany },
+  { fetchCompanies, createCompany, fetchActiveUser, fetchProperties, editCompany, setActiveCompany, fetchData },
   {}
 );

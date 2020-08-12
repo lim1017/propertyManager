@@ -23,7 +23,7 @@ import styles2 from "assets/jss/material-dashboard-react/components/sidebarStyle
 
 import {PropertyDetails} from "../views/PropertyDetails/PropertyDetails"
 import CompanyProfile from "../views/CompanyProfile/CompanyProfile"
-import CreateCompanyProfile from "../views/CompanyProfile/CreateCompanyProfile"
+import PropertyProfile from "../views/PropertyProfileCreate/PropertyProfile"
 
 import { Provider } from '../hooks/reducers/appDataReducer'
 
@@ -63,6 +63,9 @@ const switchRoutes = (
 
 <Route path="/admin/property/:id" component={PropertyDetails} />
 <Route path="/admin/companyprofile/create" component={CompanyProfile} />
+<Route path="/admin/propertyprofile/create" component={PropertyProfile} />
+
+
 
     {routes.map((prop, key) => {
       if (prop.layout === "/admin") {
