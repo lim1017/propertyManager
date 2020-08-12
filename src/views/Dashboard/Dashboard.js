@@ -58,7 +58,7 @@ export default function Dashboard(props) {
     fetchData();
   }, []);
 
-  console.log(localStorage.getItem("id"));
+  console.log(state)
 
   useEffect(() => {
     if (state.activeCompany) {

@@ -87,15 +87,16 @@ export const createCompany = (dispatch) => {
 };
 
 export const editCompany = (dispatch) => {
-  console.log('inside editing company')
   return async (companyDetails, userId) => {
+
+    console.log(companyDetails)
+
     await propertyAPI.patch(`/company/edit/${companyDetails.company_id}`, { ...companyDetails, userId });
   };
 };
 
 export const setActiveCompany = (dispatch) => {
   return async (activeCompany) => {
-    console.log(activeCompany, 'setting active company')
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: activeCompany });
 
   };
