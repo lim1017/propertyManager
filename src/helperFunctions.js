@@ -23,3 +23,16 @@ export const sortObjUnit = (a, b) => {
   }
   return comparison;
 }
+
+export const sortObjTenant = (a, b) => {
+  const unit1 = a.tenant_id;
+  const unit2 = b.tenand_id;
+
+  let comparison = 0;
+  if (unit1 > unit2) {
+    comparison = 1;
+  } else if (unit1 < unit2) {
+    comparison = -1;
+  }
+  return comparison;
+}

@@ -15,6 +15,8 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import avatar from "assets/img/faces/marc.jpg";
 import Modal from "../../components/Modal/Modal"
 
+import CardFooter from "components/Card/CardFooter";
+import UnitProfile from "../../components/UnitProfile/UnitProfile"
 
 const styles = {
   cardCategoryWhite: {
@@ -106,30 +108,19 @@ export const PropertyDetails = (props) => {
   const renderUnits= ()=>{
     return state.units? state.units.map(unit =>{
       return (
-        <Card key={unit.unit_id}>
-          <CardBody>
-            <div style={{display:'flex', justifyContent:"space-between"}}>
-            {unit.unit}
-            <div>
-            <Button color="primary">Add Tenant</Button> 
-            <Button 
-            color="primary"
-            onClick={()=>{
-              setIsEditing(true)
-              setShowModal(true) 
-              setUnitInModal(unit.unit_id)
-            }}
-            >Edit</Button>
-            <Button color="primary">Delete</Button>
-            </div>
-            </div>
-          </CardBody>
-        </Card>
+
+        <UnitProfile 
+          unit={unit} 
+          setIsEditing={setIsEditing} 
+          setShowModal={setShowModal} 
+          setUnitInModal={setUnitInModal}
+        />
+     
       )
     }) : null
   }
 
-  console.log(state)
+  // console.log(state)
 
   return (
     <div>

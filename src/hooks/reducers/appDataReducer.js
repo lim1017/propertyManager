@@ -1,6 +1,6 @@
 import propertyAPI from "../../apis/propertyManagerAPI";
 import createDataContext from "../useContext";
-import { sortObj, sortObjUnit } from "../../helperFunctions";
+import { sortObj, sortObjUnit, sortObjTenant } from "../../helperFunctions";
 
 export const SET_DATA = "SET_DATA";
 export const SET_COMPANY = "SET_COMPANY";
@@ -10,7 +10,6 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_ACTIVE_COMPANY = "SET_ACTIVE_COMPANY";
 export const SET_USER = "SET_USER";
 export const SET_UNITS = "SET_UNITS";
-
 
 export default function reducerz(state, action) {
   switch (action.type) {
@@ -47,8 +46,8 @@ export default function reducerz(state, action) {
     case SET_UNITS:
       return {
         ...state,
-        units: action.units
-      }
+        units: action.units,
+      };
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -114,16 +113,21 @@ export const editCompany = (dispatch) => {
   };
 };
 
-
 export const createProperty = (dispatch) => {
   return async (propertyDetails, activeCompanyId) => {
-    await propertyAPI.post("/property/create", { ...propertyDetails, activeCompanyId });
+    await propertyAPI.post("/property/create", {
+      ...propertyDetails,
+      activeCompanyId,
+    });
   };
 };
 
 export const createUnit = (dispatch) => {
   return async (unitDetails, propertyId) => {
-    const response = await propertyAPI.post("/unit/create", { ...unitDetails, propertyId });
+    const response = await propertyAPI.post("/unit/create", {
+      ...unitDetails,
+      propertyId,
+    });
   };
 };
 
@@ -139,15 +143,39 @@ export const editUnit = (dispatch) => {
 export const fetchUnits = (dispatch) => {
   return async (propertyId) => {
     const units = await propertyAPI.get(`/units/${propertyId}`);
-    console.log(units.data)
-
-    const sortedUnits= units.data.sort(sortObjUnit)
-    console.log(sortedUnits)
+    const sortedUnits = units.data.sort(sortObjUnit);
     await dispatch({ type: SET_UNITS, units: sortedUnits });
-
   };
 };
 
+export const createTenant = (dispatch) => {
+  return async (tenantDetails, unitId) => {
+    const response = await propertyAPI.post("/tenant/create", {
+      ...tenantDetails,
+      unitId,
+    });
+  };
+};
+
+export const editTenant = (dispatch) => {
+  return async (tenantDetails, userId) => {
+    await propertyAPI.patch(`/tenant/edit/${tenantDetails.tenant_id}`, {
+      ...tenantDetails,
+      userId,
+    });
+  };
+};
+
+
+export const fetchTenants = (dispatch) => {
+  return async (unitId) => {
+    // const tenants = await propertyAPI.get(`/tenants/${unitId}`);
+    const tenants = await propertyAPI.get(`/tenants`);
+
+    const sortedTenants = tenants.data.sort(sortObjTenant);
+    await dispatch({ type: SET_TENANTS, tenants: sortedTenants });
+  };
+};
 
 export const setActiveCompany = (dispatch) => {
   return async (activeCompany) => {
@@ -168,7 +196,10 @@ export const { Context, Provider } = createDataContext(
     createProperty,
     createUnit,
     editUnit,
-    fetchUnits
+    fetchUnits,
+    createTenant,
+    fetchTenants,
+    editTenant
   },
   {}
 );
