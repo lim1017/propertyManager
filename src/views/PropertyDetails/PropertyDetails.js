@@ -45,16 +45,16 @@ export const PropertyDetails = (props) => {
   const {
     state,
     dispatch,
-    fetchCompanies,
-    createCompany,
-    editCompany,
-    setActiveCompany,
     fetchData,
     fetchProperties,
+    fetchUnits
   } = context;
   const [propertyDetails, setPropertyDetails] = useState({});
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [unitInModal, setUnitInModal] = useState(null);
+
 
 
   const activeProperty = props.match.params.id;
@@ -80,8 +80,6 @@ export const PropertyDetails = (props) => {
     fetchData4App();
   }, []);
 
-  console.log(state);
-
   useEffect(() => {
     async function getProperty() {
       if (state.activeCompany) {
@@ -98,26 +96,59 @@ export const PropertyDetails = (props) => {
     getProperty();
   }, [state.activeCompany]);
 
-  console.log(propertyDetails);
+
+  useEffect(() => {
+    if(propertyDetails.property_id){
+      fetchUnits(propertyDetails.property_id)
+    }
+  }, [propertyDetails])
+
+  const renderUnits= ()=>{
+    return state.units? state.units.map(unit =>{
+      return (
+        <Card key={unit.unit_id}>
+          <CardBody>
+            <div style={{display:'flex', justifyContent:"space-between"}}>
+            {unit.unit}
+            <div>
+            <Button color="primary">Add Tenant</Button> 
+            <Button 
+            color="primary"
+            onClick={()=>{
+              setIsEditing(true)
+              setShowModal(true) 
+              setUnitInModal(unit.unit_id)
+            }}
+            >Edit</Button>
+            <Button color="primary">Delete</Button>
+            </div>
+            </div>
+          </CardBody>
+        </Card>
+      )
+    }) : null
+  }
+
+  console.log(state)
 
   return (
     <div>
-      <Modal showModal={showModal} setShowModal={setShowModal} data={propertyDetails} />
+      <Modal showModal={showModal} setShowModal={setShowModal} data={propertyDetails} editState={isEditing} unitInModal={unitInModal}/>
       <Card>
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
             {propertyDetails.name} // {propertyDetails.type}
           </h4>
           <div className={classes.cardCategoryWhite}>
-            {propertyDetails.address?.address.toUpperCase()}
+            {propertyDetails.address?.address?.toUpperCase()}
           </div>
           <div className={classes.cardCategoryWhite}>
-            {propertyDetails.address?.city.toUpperCase()},{" "}
-            {propertyDetails.address?.postal.toUpperCase()},{" "}
-            {propertyDetails.address?.country.toUpperCase()}
+            {propertyDetails.address?.city?.toUpperCase()},{" "}
+            {propertyDetails.address?.postal?.toUpperCase()},{" "}
+            {propertyDetails.address?.country?.toUpperCase()}
           </div>
           <div className={classes.cardCategoryWhite}>
-            {propertyDetails.address?.country.toUpperCase()}
+            {propertyDetails.address?.country?.toUpperCase()}
           </div>
         </CardHeader>
 
@@ -133,6 +164,9 @@ export const PropertyDetails = (props) => {
             <p style={{fontSize: 22, marginTop:5, marginRight: 10}}>Units</p> 
             <Button variant="contained" color="primary" onClick={()=>setShowModal(true)}>Add Unit</Button> 
             </div>
+            
+            {renderUnits()}
+
           </CardBody>
           </Card>
         </GridItem>

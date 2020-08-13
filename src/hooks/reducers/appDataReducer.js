@@ -1,6 +1,6 @@
 import propertyAPI from "../../apis/propertyManagerAPI";
 import createDataContext from "../useContext";
-import { sortObj } from "../../helperFunctions";
+import { sortObj, sortObjUnit } from "../../helperFunctions";
 
 export const SET_DATA = "SET_DATA";
 export const SET_COMPANY = "SET_COMPANY";
@@ -9,6 +9,8 @@ export const SET_TENANTS = "SET_TENANTS";
 export const SET_LOADING = "SET_LOADING";
 export const SET_ACTIVE_COMPANY = "SET_ACTIVE_COMPANY";
 export const SET_USER = "SET_USER";
+export const SET_UNITS = "SET_UNITS";
+
 
 export default function reducerz(state, action) {
   switch (action.type) {
@@ -42,6 +44,11 @@ export default function reducerz(state, action) {
         ...state,
         tenants: action.tenants,
       };
+    case SET_UNITS:
+      return {
+        ...state,
+        units: action.units
+      }
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -114,6 +121,33 @@ export const createProperty = (dispatch) => {
   };
 };
 
+export const createUnit = (dispatch) => {
+  return async (unitDetails, propertyId) => {
+    const response = await propertyAPI.post("/unit/create", { ...unitDetails, propertyId });
+  };
+};
+
+export const editUnit = (dispatch) => {
+  return async (unitDetails, unitId) => {
+    await propertyAPI.patch(`/unit/edit/${unitId}`, {
+      ...unitDetails,
+      unitId,
+    });
+  };
+};
+
+export const fetchUnits = (dispatch) => {
+  return async (propertyId) => {
+    const units = await propertyAPI.get(`/units/${propertyId}`);
+    console.log(units.data)
+
+    const sortedUnits= units.data.sort(sortObjUnit)
+    console.log(sortedUnits)
+    await dispatch({ type: SET_UNITS, units: sortedUnits });
+
+  };
+};
+
 
 export const setActiveCompany = (dispatch) => {
   return async (activeCompany) => {
@@ -132,6 +166,9 @@ export const { Context, Provider } = createDataContext(
     setActiveCompany,
     fetchData,
     createProperty,
+    createUnit,
+    editUnit,
+    fetchUnits
   },
   {}
 );

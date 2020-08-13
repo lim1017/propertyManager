@@ -10,3 +10,16 @@ export const sortObj = (a, b) => {
   }
   return comparison;
 }
+
+export const sortObjUnit = (a, b) => {
+  const unit1 = a.unit;
+  const unit2 = b.unit;
+
+  let comparison = 0;
+  if (unit1 > unit2) {
+    comparison = 1;
+  } else if (unit1 < unit2) {
+    comparison = -1;
+  }
+  return comparison;
+}

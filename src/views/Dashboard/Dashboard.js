@@ -11,7 +11,6 @@ import {
   SET_USER,
   SET_ACTIVE_COMPANY,
 } from "../../hooks/reducers/appDataReducer";
-import { sortObj } from "../../helperFunctions"
 import BasicCardPicture from "../../components/Card/BasicCardPicture";
 import propertyAPI from "../../apis//propertyManagerAPI";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";

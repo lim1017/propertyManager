@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -14,6 +14,8 @@ import GridContainer from "components/Grid/GridContainer.js";
 import InputLabel from "@material-ui/core/InputLabel";
 import GridItem from "components/Grid/GridItem.js";
 import CheckBox from "../CheckBox/CheckBox"
+import { Context } from "../../hooks/reducers/appDataReducer";
+import propertyAPI from "../../apis/propertyManagerAPI"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,12 +49,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TransitionsModal({ showModal, setShowModal, data }) {
+export default function TransitionsModal({ showModal, setShowModal, data, editState, unitInModal }) {
   const classes = useStyles();
+
+  const context = useContext(Context);
+  const {state, createUnit, editUnit, fetchUnits} = context;
   const [unitDetails, setUnitDetails] = useState({});
   const [isCommercial, setIsCommercial] = useState(false);
 
-  console.log(unitDetails)
+  useEffect(() => {
+
+    async function getUnit(){
+      const unitInfo = await propertyAPI.get(`/unit/${unitInModal}`)
+      console.log(unitInfo)
+      setUnitDetails(unitInfo.data[0])
+    }
+
+    if (editState){
+      getUnit()
+    }
+  }, [editState])
 
   const handleClose = () => {
     setShowModal(false);
@@ -69,11 +85,19 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
 
   const handleSubmit = async () => {
     
-    console.log(unitDetails)
-
+    if(!editState){
+      await createUnit(unitDetails, data.property_id)
+      fetchUnits(data.property_id)
+    } else{
+      await editUnit(unitDetails, unitInModal)
+      fetchUnits(data.property_id)
+      
+    }
+    
     handleClose()
 
   };
+
 
   
   return (
@@ -95,10 +119,10 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
             <Card>
               <CardHeader color="primary">
                 <div style={{display:"flex", justifyContent:"space-between"}}>
-                <h4 className={classes.cardTitleWhite}>Add a Unit</h4>
+                <h4 className={classes.cardTitleWhite}>{editState ? "Edit unit details" : "Add a Unit"}</h4>
                 <div style={{display:"flex"}}>
                 <CheckBox label="Commercial" initalState={isCommercial} handleChange={()=>setIsCommercial(!isCommercial)} />
-                <CheckBox label="Occupied" initalState={unitDetails.Occupied} handleChange={handleChange}/>
+                <CheckBox label="Occupied" initalState={unitDetails?.Occupied} handleChange={handleChange}/>
                 </div>
                 </div>
               </CardHeader>
@@ -110,7 +134,7 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
                     <CustomInput
                       id="unit"
                       handleChange={handleChange}
-                      value={unitDetails.unit}
+                      value={unitDetails?.unit}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -124,7 +148,7 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
                       // labelText="Company Name"
                       id="rent"
                       handleChange={handleChange}
-                      value={unitDetails.rent}
+                      value={unitDetails?.rent}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -138,7 +162,7 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
                     <CustomInput
                       id="sqft"
                       handleChange={handleChange}
-                      value={unitDetails.sqft}
+                      value={unitDetails?.sqft}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -152,7 +176,7 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
                     <CustomInput
                       id="bedroom"
                       handleChange={handleChange}
-                      value={unitDetails.bedroom}
+                      value={unitDetails?.bedroom}
                       formControlProps={{
                         fullWidth: true,
                         style: { marginTop: 0 },
@@ -184,7 +208,7 @@ export default function TransitionsModal({ showModal, setShowModal, data }) {
                     <CustomInput
                       id="notes"
                       handleChange={handleChange}
-                      value={unitDetails.notes}
+                      value={unitDetails?.notes}
                       formControlProps={{
                         fullWidth: true,
                       }}
