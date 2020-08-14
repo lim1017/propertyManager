@@ -66,10 +66,7 @@ export default function CompanyProfile({
   const [tenantModal, setTenantModal] = useState(false);
   const [unitInModalTenant, setUnitInModalTenant] = useState(null)
 
-console.log(state)
-
   useEffect(() => {
-    console.log(unit.unit_id)
     fetchTenants(unit.unit_id);
   }, []);
 
@@ -145,7 +142,7 @@ console.log(state)
         </CardBody>
         <CardFooter>
           <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
-          <div style={{marginLeft:"5px"}}>Tenants: </div> 
+          <div style={{marginLeft:"5px"}}>Tenant(s): </div> 
           <div>{renderTenants()}</div>
           </div>
         </CardFooter>

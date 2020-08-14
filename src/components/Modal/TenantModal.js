@@ -80,6 +80,8 @@ export default function TransitionsModal({
   const handleClose = () => {
     setTenantModal(false);
     setIsEditingTenant(false)
+    setTenantDetails({})
+    
     
   };
 
@@ -103,7 +105,9 @@ export default function TransitionsModal({
   };
 
   const handleDelete = async () =>{
-
+    await propertyAPI.delete(`/tenant/${tenantDetails.tenant_id}`)
+    fetchTenants()
+    handleClose()
   }
 
   // console.log(data);
