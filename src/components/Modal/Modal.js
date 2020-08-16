@@ -94,6 +94,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
       
     }
     
+    setUnitDetails({})
     handleClose()
 
   };

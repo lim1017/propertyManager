@@ -14,7 +14,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI";
-import { Context } from "../../hooks/reducers/appDataReducer";
+import { Context, fetchUnits } from "../../hooks/reducers/appDataReducer";
 import TenantModal from "../../components/Modal/TenantModal";
 
 import {
@@ -48,6 +48,7 @@ export default function CompanyProfile({
   setIsEditing,
   setShowModal,
   setUnitInModal,
+  propertyDetails
 }) {
   const context = useContext(Context);
   const {
@@ -60,6 +61,7 @@ export default function CompanyProfile({
     fetchData,
     fetchProperties,
     fetchTenants,
+    fetchUnits,
   } = context;
 
   const [isEditingTenant, setIsEditingTenant] = useState(false);
@@ -90,6 +92,14 @@ export default function CompanyProfile({
         })
       : null;
   };
+
+  const handleDelete = async () =>{
+    console.log(unit)
+    await propertyAPI.delete(`/unit/${unit.unit_id}`)
+    console.log(propertyDetails)
+    await fetchUnits(propertyDetails.property_id)
+    console.log(state)
+  }
 
   const classes = useStyles();
   return (
@@ -135,7 +145,10 @@ export default function CompanyProfile({
               >
                 Edit
               </Button>
-              <Button color="primary">Delete</Button>
+              <Button 
+              color="primary"
+              onClick={handleDelete}
+              >Delete Unit</Button>
             </div>
           </div>
           Rent $ {unit.rent}

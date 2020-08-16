@@ -104,12 +104,14 @@ export const PropertyDetails = (props) => {
       fetchUnits(propertyDetails.property_id)
     }
   }, [propertyDetails])
+  
 
   const renderUnits= ()=>{
     return state.units? state.units.map(unit =>{
       return (
 
         <UnitProfile 
+          propertyDetails={propertyDetails}
           unit={unit} 
           setIsEditing={setIsEditing} 
           setShowModal={setShowModal} 
@@ -120,7 +122,7 @@ export const PropertyDetails = (props) => {
     }) : null
   }
 
-  // console.log(state)
+  console.log(state)
 
   return (
     <div>
