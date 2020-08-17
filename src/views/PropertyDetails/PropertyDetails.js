@@ -11,12 +11,11 @@ import GridItem from "components/Grid/GridItem.js";
 
 // import Button from "components/CustomButtons/Button.js";
 import Button from "@material-ui/core/Button";
-import CardAvatar from "components/Card/CardAvatar.js";
-import avatar from "assets/img/faces/marc.jpg";
-import Modal from "../../components/Modal/Modal"
+import Modal from "../../components/Modal/Modal";
 
 import CardFooter from "components/Card/CardFooter";
-import UnitProfile from "../../components/UnitProfile/UnitProfile"
+import UnitProfile from "../../components/UnitProfile/UnitProfile";
+import PropertySummaryCard from "components/PropertySummaryCard/PropertySummaryCard";
 
 const styles = {
   cardCategoryWhite: {
@@ -44,20 +43,12 @@ export const PropertyDetails = (props) => {
   const classes = useStyles();
 
   const context = useContext(Context);
-  const {
-    state,
-    dispatch,
-    fetchData,
-    fetchProperties,
-    fetchUnits
-  } = context;
+  const { state, dispatch, fetchData, fetchProperties, fetchUnits } = context;
   const [propertyDetails, setPropertyDetails] = useState({});
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [unitInModal, setUnitInModal] = useState(null);
-
-
 
   const activeProperty = props.match.params.id;
   const activeUser = localStorage.getItem("id");
@@ -98,35 +89,40 @@ export const PropertyDetails = (props) => {
     getProperty();
   }, [state.activeCompany]);
 
-
   useEffect(() => {
-    if(propertyDetails.property_id){
-      fetchUnits(propertyDetails.property_id)
+    if (propertyDetails.property_id) {
+      fetchUnits(propertyDetails.property_id);
     }
-  }, [propertyDetails])
-  
+  }, [propertyDetails]);
 
-  const renderUnits= ()=>{
-    return state.units? state.units.map(unit =>{
-      return (
+  const renderUnits = () => {
+    return state.units
+      ? state.units.map((unit) => {
+          return (
+            <UnitProfile
+              propertyDetails={propertyDetails}
+              unit={unit}
+              setIsEditing={setIsEditing}
+              setShowModal={setShowModal}
+              setUnitInModal={setUnitInModal}
+            />
+          );
+        })
+      : null;
+  };
 
-        <UnitProfile 
-          propertyDetails={propertyDetails}
-          unit={unit} 
-          setIsEditing={setIsEditing} 
-          setShowModal={setShowModal} 
-          setUnitInModal={setUnitInModal}
-        />
-     
-      )
-    }) : null
-  }
-
-  console.log(state)
+  console.log(state);
 
   return (
     <div>
-      <Modal showModal={showModal} setShowModal={setShowModal} data={propertyDetails} editState={isEditing} unitInModal={unitInModal}/>
+      <Modal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        data={propertyDetails}
+        editState={isEditing}
+        unitInModal={unitInModal}
+        setEditState={setIsEditing}
+      />
       <Card>
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
@@ -148,42 +144,42 @@ export const PropertyDetails = (props) => {
         <CardBody></CardBody>
       </Card>
 
-      <GridContainer style={{display:"flex", justifyContent:"space-between"}}>
-
+      <GridContainer
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
         <GridItem xs={12} sm={12} md={8}>
-          <Card >
-          <CardBody>
-            <div style={{display:"flex", justifyContent:"space-between"}}>
-            <p style={{fontSize: 22, marginTop:5, marginRight: 10}}>Units</p> 
-            <Button variant="contained" color="primary" onClick={()=>setShowModal(true)}>Add Unit</Button> 
-            </div>
-            
-            {renderUnits()}
+          <Card>
+            <CardBody>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex" }}>
+                  <p style={{ fontSize: 22, marginTop: 5, marginRight: 10 }}>
+                    Units{" "}
+                  </p>
+                  <p style={{ fontSize: 12, marginTop: 5, marginRight: 10, fontWeight:"bold" }}>
+                    *Vacant
+                  </p>
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  Add Unit
+                </Button>
+              </div>
 
-          </CardBody>
+              {renderUnits()}
+            </CardBody>
           </Card>
         </GridItem>
 
         <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
-          </Card>
+          <PropertySummaryCard
+            state={state}
+            propertyDetails={propertyDetails}
+          />
         </GridItem>
       </GridContainer>
     </div>

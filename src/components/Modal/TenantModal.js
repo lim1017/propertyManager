@@ -61,14 +61,10 @@ export default function TransitionsModal({
   const context = useContext(Context);
   const { state, createUnit, editUnit, fetchUnits, createTenant, fetchTenants, editTenant } = context;
   const [tenantDetails, setTenantDetails] = useState({});
-
+  
   useEffect(() => {
-
-    console.log(isEditingTenant)
-
     async function getTenant(){  
       const TenantInfo = await propertyAPI.get(`/tenant/${unitInModalTenant}`)
-      console.log(TenantInfo)
       setTenantDetails(TenantInfo.data[0])
     }
 
@@ -79,7 +75,7 @@ export default function TransitionsModal({
 
   const handleClose = () => {
     setTenantModal(false);
-    setIsEditingTenant(false)
+    // setIsEditingTenant(false)
     setTenantDetails({})
     
     
@@ -93,6 +89,8 @@ export default function TransitionsModal({
     if (isEditingTenant) {
       await editTenant(tenantDetails)
       await fetchTenants(data.unit_id)
+      // setIsEditingTenant(false)
+
 
     } else {
       console.log(tenantDetails)

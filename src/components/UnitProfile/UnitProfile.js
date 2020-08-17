@@ -92,13 +92,11 @@ export default function CompanyProfile({
         })
       : null;
   };
+  console.log(unit)
 
   const handleDelete = async () =>{
-    console.log(unit)
     await propertyAPI.delete(`/unit/${unit.unit_id}`)
-    console.log(propertyDetails)
     await fetchUnits(propertyDetails.property_id)
-    console.log(state)
   }
 
   const classes = useStyles();
@@ -123,7 +121,7 @@ export default function CompanyProfile({
               fontWeight: 800,
             }}
           >
-            Unit: {unit.unit}
+            Unit: {unit.unit} {unit.occupied ? null : "*"}
             <div>
               <Button
                 color="primary"

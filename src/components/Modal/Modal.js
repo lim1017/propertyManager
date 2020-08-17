@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TransitionsModal({ showModal, setShowModal, data, editState, unitInModal }) {
+export default function TransitionsModal({ showModal, setShowModal, data, editState, setEditState, unitInModal }) {
   const classes = useStyles();
 
   const context = useContext(Context);
@@ -57,11 +57,12 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
   const [unitDetails, setUnitDetails] = useState({});
   const [isCommercial, setIsCommercial] = useState(false);
 
+
+
   useEffect(() => {
 
     async function getUnit(){
       const unitInfo = await propertyAPI.get(`/unit/${unitInModal}`)
-      console.log(unitInfo)
       setUnitDetails(unitInfo.data[0])
     }
 
@@ -70,16 +71,18 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
     }
   }, [editState])
 
+
   const handleClose = () => {
+    setEditState(false)
     setShowModal(false);
   };
 
   const handleChange = (e, id) => {
     if (id ==="Occupied"){
-      setUnitDetails({ ...unitDetails, [id]: e.target.checked });
+      setUnitDetails({ ...unitDetails, [id.toLowerCase()]: e.target.checked });
 
     } else if(id === "Hydro" || id === "Gas" || id === "Water" || id=== "Taxes"){
-      setUnitDetails({ ...unitDetails, tmi:{...unitDetails.tmi, [id]: e.target.checked}  });
+      setUnitDetails({ ...unitDetails, tmi:{...unitDetails.tmi, [id.toLowerCase()]: e.target.checked}  });
     } else setUnitDetails({ ...unitDetails, [id]: e.target.value });
   };
 
@@ -99,7 +102,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
 
   };
 
-
+  console.log(unitDetails)
   
   return (
     <div>
@@ -123,7 +126,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
                 <h4 className={classes.cardTitleWhite}>{editState ? "Edit unit details" : "Add a Unit"}</h4>
                 <div style={{display:"flex"}}>
                 <CheckBox label="Commercial" initalState={isCommercial} handleChange={()=>setIsCommercial(!isCommercial)} />
-                <CheckBox label="Occupied" initalState={unitDetails?.Occupied} handleChange={handleChange}/>
+                <CheckBox label="Occupied" initalState={unitDetails.occupied} handleChange={handleChange}/>
                 </div>
                 </div>
               </CardHeader>
@@ -189,10 +192,10 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
                 <GridItem xs={12} sm={12} md={12}>
                   <h5>Included</h5>
                   <div style={{display:"flex"}}>
-                    <CheckBox color="purple" label="Hydro" initalState={unitDetails?.tmi?.Hydro} handleChange={handleChange}/>
-                    <CheckBox color="purple" label="Gas" initalState={unitDetails?.tmi?.Gas} handleChange={handleChange}/>
-                    <CheckBox color="purple" label="Water" initalState={unitDetails?.tmi?.Water} handleChange={handleChange}/>
-                    {isCommercial ? <CheckBox color="purple" label="Taxes" initalState={unitDetails?.tmi?.Taxes} handleChange={handleChange}/> : null}
+                    <CheckBox color="purple" label="Hydro" initalState={unitDetails?.tmi?.hydro} handleChange={handleChange}/>
+                    <CheckBox color="purple" label="Gas" initalState={unitDetails?.tmi?.gas} handleChange={handleChange}/>
+                    <CheckBox color="purple" label="Water" initalState={unitDetails?.tmi?.water} handleChange={handleChange}/>
+                    {isCommercial ? <CheckBox color="purple" label="Taxes" initalState={unitDetails?.tmi?.taxes} handleChange={handleChange}/> : null}
                   </div>
                 </GridItem>
 

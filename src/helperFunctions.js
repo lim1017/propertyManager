@@ -9,7 +9,7 @@ export const sortObj = (a, b) => {
     comparison = -1;
   }
   return comparison;
-}
+};
 
 export const sortObjUnit = (a, b) => {
   const unit1 = a.unit;
@@ -22,7 +22,7 @@ export const sortObjUnit = (a, b) => {
     comparison = -1;
   }
   return comparison;
-}
+};
 
 export const sortObjTenant = (a, b) => {
   const unit1 = a.tenant_id;
@@ -35,4 +35,29 @@ export const sortObjTenant = (a, b) => {
     comparison = -1;
   }
   return comparison;
-}
+};
+
+export const countOccupiedUnits = (units) => {
+  if (units) {
+    const occupied = units.filter((unit) => {
+      return unit.occupied;
+    });
+
+    return occupied;
+  }
+  return 0;
+};
+
+export const totalUnitsRent = (units) => {
+  let totalRent = 0;
+
+  if (units) {
+    units.forEach((unit) => {
+      let num = parseInt(unit.rent);
+      if (unit.rent !== "" && unit.rent !== null) {
+        totalRent = totalRent + num;
+      }
+    });
+  }
+  return totalRent;
+};

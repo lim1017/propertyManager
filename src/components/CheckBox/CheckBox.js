@@ -30,14 +30,6 @@ const PurpleCheckbox = withStyles({
 })((props) => <Checkbox color="default" {...props} />);
 
 export default function CheckboxLabels({label, initalState, handleChange, color}) {
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedF: true,
-    checkedG: true,
-  });
-
-
   return (
     <FormGroup row>
       {color === "purple" ?
