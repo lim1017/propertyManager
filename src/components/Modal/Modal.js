@@ -101,8 +101,6 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
     handleClose()
 
   };
-
-  console.log(unitDetails)
   
   return (
     <div>

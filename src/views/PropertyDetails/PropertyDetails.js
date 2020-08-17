@@ -16,6 +16,7 @@ import Modal from "../../components/Modal/Modal";
 import CardFooter from "components/Card/CardFooter";
 import UnitProfile from "../../components/UnitProfile/UnitProfile";
 import PropertySummaryCard from "components/PropertySummaryCard/PropertySummaryCard";
+import PropertyManagerInfo from "components/PropertyManagerInfo/PropertyManagerInfo";
 
 const styles = {
   cardCategoryWhite: {
@@ -111,7 +112,7 @@ export const PropertyDetails = (props) => {
       : null;
   };
 
-  console.log(state);
+  console.log(propertyDetails);
 
   return (
     <div>
@@ -144,6 +145,9 @@ export const PropertyDetails = (props) => {
         <CardBody></CardBody>
       </Card>
 
+      {propertyDetails.manager ? <PropertyManagerInfo manager={propertyDetails.manager} /> : null }
+      
+
       <GridContainer
         style={{ display: "flex", justifyContent: "space-between" }}
       >
@@ -156,7 +160,7 @@ export const PropertyDetails = (props) => {
                     Units{" "}
                   </p>
                   <p style={{ fontSize: 12, marginTop: 5, marginRight: 10, fontWeight:"bold" }}>
-                    *Vacant
+                    *Unoccupied
                   </p>
                 </div>
                 <Button
