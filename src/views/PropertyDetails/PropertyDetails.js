@@ -114,6 +114,8 @@ export const PropertyDetails = (props) => {
 
   console.log(propertyDetails);
 
+  let isManager= propertyDetails.manager ? 8 : 12
+
   return (
     <div>
       <Modal
@@ -124,29 +126,36 @@ export const PropertyDetails = (props) => {
         unitInModal={unitInModal}
         setEditState={setIsEditing}
       />
-      <Card>
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>
-            {propertyDetails.name} // {propertyDetails.type}
-          </h4>
-          <div className={classes.cardCategoryWhite}>
-            {propertyDetails.address?.address?.toUpperCase()}
-          </div>
-          <div className={classes.cardCategoryWhite}>
-            {propertyDetails.address?.city?.toUpperCase()},{" "}
-            {propertyDetails.address?.postal?.toUpperCase()},{" "}
-            {propertyDetails.address?.country?.toUpperCase()}
-          </div>
-          <div className={classes.cardCategoryWhite}>
-            {propertyDetails.address?.country?.toUpperCase()}
-          </div>
-        </CardHeader>
+            <GridContainer>
 
-        <CardBody></CardBody>
-      </Card>
+      <GridItem xs={12} sm={12} md={isManager}>
+        <Card>
+          <CardHeader color="primary">
+            <h4 className={classes.cardTitleWhite}>
+              {propertyDetails.name} // {propertyDetails.type}
+            </h4>
+            <div className={classes.cardCategoryWhite}>
+              {propertyDetails.address?.address?.toUpperCase()}
+            </div>
+            <div className={classes.cardCategoryWhite}>
+              {propertyDetails.address?.city?.toUpperCase()},{" "}
+              {propertyDetails.address?.postal?.toUpperCase()},{" "}
+              {propertyDetails.address?.country?.toUpperCase()}
+            </div>
+            <div className={classes.cardCategoryWhite}>
+              {propertyDetails.address?.country?.toUpperCase()}
+            </div>
+          </CardHeader>
 
-      {propertyDetails.manager ? <PropertyManagerInfo manager={propertyDetails.manager} /> : null }
-      
+          <CardBody></CardBody>
+        </Card>
+      </GridItem>
+
+      <GridItem xs={12} sm={12} md={4}>
+        {propertyDetails.manager ? <PropertyManagerInfo manager={propertyDetails.manager} /> : null }
+      </GridItem>
+
+      </GridContainer>
 
       <GridContainer
         style={{ display: "flex", justifyContent: "space-between" }}
