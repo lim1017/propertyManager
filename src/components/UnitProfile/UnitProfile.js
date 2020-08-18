@@ -16,6 +16,7 @@ import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI";
 import { Context, fetchUnits } from "../../hooks/reducers/appDataReducer";
 import TenantModal from "../../components/Modal/TenantModal";
+import IssuesModal from "../../components/Modal/IssuesModal";
 
 import {
   SET_ACTIVE_COMPANY,
@@ -66,6 +67,8 @@ export default function CompanyProfile({
 
   const [isEditingTenant, setIsEditingTenant] = useState(false);
   const [tenantModal, setTenantModal] = useState(false);
+  const [issuesModal, setIssusesModal] = useState(false);
+
   const [unitInModalTenant, setUnitInModalTenant] = useState(null)
 
   useEffect(() => {
@@ -110,6 +113,7 @@ export default function CompanyProfile({
         setIsEditingTenant={setIsEditingTenant}
         unitInModalTenant={unitInModalTenant}
       />
+      <IssuesModal unit={unit} issuesModal={issuesModal} setIssusesModal={setIssusesModal} propertyID={propertyDetails.property_id}/>
 
       <Card key={unit.unit_id}>
         <CardBody>
@@ -126,11 +130,18 @@ export default function CompanyProfile({
               <Button
                 color="primary"
                 onClick={() => {
-                  console.log("set true");
                   setTenantModal(true);
                 }}
               >
                 Add Tenant
+              </Button>
+              <Button
+                color="primary"
+                onClick={() => {
+                  setIssusesModal(true);
+                }}
+              >
+                Add Issue
               </Button>
 
               <Button
@@ -141,7 +152,7 @@ export default function CompanyProfile({
                   setUnitInModal(unit.unit_id);
                 }}
               >
-                Edit
+                Edit Unit
               </Button>
               <Button 
               color="primary"

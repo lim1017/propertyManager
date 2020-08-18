@@ -12,6 +12,7 @@ import {Link} from 'react-router-dom'
 const useStyles = makeStyles({
   root: {
     width: 445,
+    minHeight:300
   },
   media: {
     height: 140,
