@@ -49,6 +49,17 @@ export default function MediaCard({title, img, description, id, data}) {
           Learn More
         </Button>
         </Link>
+
+        <Link
+          to={{
+            pathname: `/admin/propertyprofile/${id}`,
+            state: { state: { isEditing:true } }
+          }}
+        >
+        <Button variant="contained" size="small" color="primary">
+          Edit
+        </Button>
+        </Link>
       </CardActions>
     </Card>
   );

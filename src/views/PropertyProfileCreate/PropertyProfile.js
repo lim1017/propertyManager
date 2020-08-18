@@ -54,8 +54,10 @@ export default function CompanyProfile(props) {
     fetchData,
     fetchProperties,
     createProperty,
+    editProperty
   } = context;
 
+  const activeProperty=props.match.params.id
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
   const [propertyDetails, setpropertyDetails] = useState({});
@@ -91,7 +93,7 @@ export default function CompanyProfile(props) {
         return comp.name === state.activeCompany;
       });
       const details = await propertyAPI.get(
-        `/company/${activeUser}&${activeCompany[0].company_id}`
+        `/property/${activeCompany[0].company_id}&${activeProperty}`
       );
       setpropertyDetails(details.data[0]);
       setLoading(false);
@@ -129,6 +131,12 @@ export default function CompanyProfile(props) {
   };
 
   const handleSubmit = async () => {
+
+    const activeCompany = state.company.filter((comp) => {
+      return comp.name === state.activeCompany;
+    });
+
+
     if (!editState) { //create
 
       const activeCompany = state.company.filter((comp) => {
@@ -138,20 +146,15 @@ export default function CompanyProfile(props) {
       await createProperty(propertyDetails, activeCompany[0].company_id);
       await fetchProperties(activeCompany);
 
-      // dispatch({
-      //   type: SET_ACTIVE_COMPANY,
-      //   activeCompany: propertyDetails.companyName,
-      // });
       props.history.push("/admin/dashboard");
     } else {
-      await editCompany(propertyDetails, activeUser);
-      await fetchCompanies(activeUser);
-      setActiveCompany(propertyDetails.name);
+      console.log(propertyDetails)
+      await editProperty(propertyDetails, activeUser);
+      await fetchProperties(activeCompany);
       props.history.push("/admin/dashboard");
     }
   };
 
-  console.log(propertyDetails)
 
   const classes = useStyles();
   return (

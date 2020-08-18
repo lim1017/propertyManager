@@ -82,6 +82,15 @@ export const fetchActiveUser = (dispatch) => {
   };
 };
 
+export const createProperty = (dispatch) => {
+  return async (propertyDetails, activeCompanyId) => {
+    await propertyAPI.post("/property/create", {
+      ...propertyDetails,
+      activeCompanyId,
+    });
+  };
+};
+
 export const fetchProperties = (dispatch) => {
   return async (activeCompany) => {
     const properties = await propertyAPI.get(
@@ -90,6 +99,16 @@ export const fetchProperties = (dispatch) => {
     dispatch({ type: SET_PROPERTIES, properties: properties.data });
   };
 };
+
+export const editProperty = (dispatch) => {
+  return async (PropertyDetails, userId) => {
+    await propertyAPI.patch(`/property/edit/${PropertyDetails.Property_id}`, {
+      ...PropertyDetails,
+      userId,
+    });
+  };
+};
+
 
 export const fetchCompanies = (dispatch) => {
   return async (userId) => {
@@ -113,14 +132,7 @@ export const editCompany = (dispatch) => {
   };
 };
 
-export const createProperty = (dispatch) => {
-  return async (propertyDetails, activeCompanyId) => {
-    await propertyAPI.post("/property/create", {
-      ...propertyDetails,
-      activeCompanyId,
-    });
-  };
-};
+
 
 export const createUnit = (dispatch) => {
   return async (unitDetails, propertyId) => {
@@ -190,6 +202,7 @@ export const { Context, Provider } = createDataContext(
     createCompany,
     fetchActiveUser,
     fetchProperties,
+    editProperty,
     editCompany,
     setActiveCompany,
     fetchData,
