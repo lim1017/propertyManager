@@ -195,6 +195,30 @@ export const setActiveCompany = (dispatch) => {
   };
 };
 
+
+export const fetchIssues = (dispatch) => {
+  return async (userId) => {
+    const companies = await propertyAPI.get(`/issues/${userId}`);
+    await dispatch({ type: SET_COMPANY, company: companies.data });
+  };
+};
+
+export const createIssue = (dispatch) => {
+  return async (companyDetails, userId) => {
+    await propertyAPI.post("/company/create", { ...companyDetails, userId });
+  };
+};
+
+export const editIssue = (dispatch) => {
+  return async (companyDetails, userId) => {
+    await propertyAPI.patch(`/company/edit/${companyDetails.company_id}`, {
+      ...companyDetails,
+      userId,
+    });
+  };
+};
+
+
 export const { Context, Provider } = createDataContext(
   reducerz,
   {

@@ -19,6 +19,16 @@ const useStyles = makeStyles((theme) => ({
 const Dropdown = ({ data, label, handleChg, value, isDisabled, id, style }) => {
   const classes = useStyles();
  
+ 
+  // console.log(value)
+  // const [selection, setSelection] = useState(value)
+  // console.log(selection, 'selection')
+
+  // useEffect(() => {
+  //   console.log('setting value')
+  //   setSelection(value)
+  // }, [value])
+
   const renderDropDown = ()=>{
     if(data === undefined){
       return null
@@ -35,8 +45,8 @@ const Dropdown = ({ data, label, handleChg, value, isDisabled, id, style }) => {
           onChange={(e)=>handleChg(e, id)}
         >
           {data ? data.map((element) => {
-                return <MenuItem value={element.name}>{element.name}</MenuItem>;
-              })
+            return <MenuItem value={element.name}>{element.name}</MenuItem>;
+          })
             : null}
         </Select>
       </FormControl>

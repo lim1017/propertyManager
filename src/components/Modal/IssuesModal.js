@@ -13,9 +13,9 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import InputLabel from "@material-ui/core/InputLabel";
 import GridItem from "components/Grid/GridItem.js";
-import CheckBox from "../CheckBox/CheckBox";
-import Dropdown from "../Dropdown/Dropdown";
-import { Context, fetchTenants } from "../../hooks/reducers/appDataReducer";
+import RadioBtns from "../RadioBtns/RadioBtns";
+
+import { Context } from "../../hooks/reducers/appDataReducer";
 import propertyAPI from "../../apis/propertyManagerAPI";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,34 +47,42 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     fontSize: "20px",
   },
+  issueDone: {
+    backgroundColor: "green",
+  },
 }));
 
 export default function TransitionsModal({
   unit,
   setIssusesModal,
   issuesModal,
-  propertyID
+  propertyID,
 }) {
   const classes = useStyles();
   const context = useContext(Context);
-  const {
-    state,
-    createUnit,
-    editUnit,
-    fetchUnits,
-    createTenant,
-    fetchTenants,
-    editTenant,
-  } = context;
+  const { fetchTenants } = context;
 
-  const [issues, setIssues] = useState({});
-  const [issueDetail, setIssueDetail] = useState({});
+  const [issues, setIssues] = useState([]);
+  const [issueDetail, setIssueDetail] = useState({
+    name: "",
+    status: "",
+    notes: "",
+  });
+  const [editState, setEditState] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getIssues();
+  }, []);
+
+  async function getIssues() {
+    const issues = await propertyAPI.get(`/issues/${unit.unit_id}`);
+    setIssues(issues.data);
+  }
 
   const handleClose = () => {
     setIssusesModal(false);
-    setIssues({});
+    setEditState(false);
+    setIssueDetail({ name: "", status: "", notes: "" });
   };
 
   const handleChange = (e, id) => {
@@ -82,8 +90,18 @@ export default function TransitionsModal({
   };
 
   const handleSubmit = async () => {
-    await propertyAPI.patch(`/unit/editissues/${unit.unit_id}`, issueDetail);
-    fetchUnits(propertyID)
+    if (editState) {
+      await propertyAPI.patch(`/issue/${issueDetail.issue_id}`, issueDetail);
+      getIssues();
+    } else {
+      await propertyAPI.post(`/issue/create`, {
+        issueDetail,
+        unitID: unit.unit_id,
+      });
+      const issues = await propertyAPI.get(`/issues/${unit.unit_id}`);
+      getIssues();
+    }
+
     handleClose();
   };
 
@@ -93,8 +111,11 @@ export default function TransitionsModal({
     handleClose();
   };
 
-  console.log(unit);
-  console.log(issues);
+  const handleIssueClick = (issue) => {
+    setEditState(true);
+    setIssueDetail(issue);
+  };
+
   console.log(issueDetail);
 
   return (
@@ -112,20 +133,19 @@ export default function TransitionsModal({
         }}
       >
         <Fade in={issuesModal}>
-          <div className={classes.paper}>
+          <div className={classes.paper} style={{ width: "40%" }}>
             <Card>
               <CardHeader color="primary">
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4 className={classes.cardTitleWhite}>Add Issue</h4>
-                  <div style={{ display: "flex" }}></div>
                 </div>
               </CardHeader>
 
               <CardBody>
                 <GridContainer>
-                  <GridItem xs={12} sm={12} md={6}>
+                  <GridItem xs={12} sm={12} md={7}>
                     <InputLabel>Issue </InputLabel>
                     <CustomInput
                       id="name"
@@ -138,14 +158,13 @@ export default function TransitionsModal({
                       inputProps={{}}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
-                    <Dropdown
-                      data={[{ name: "Pending" }, { name: "Complete" }]}
+                  <GridItem xs={12} sm={12} md={5}>
+                    <RadioBtns
+                      id="status"
+                      data={["Pending", "Complete"]}
                       label="Status"
                       value={issueDetail.status}
                       handleChg={handleChange}
-                      id="status"
-                      style={{paddingLeft:"80px"}}
                     />
                   </GridItem>
                 </GridContainer>
@@ -174,27 +193,37 @@ export default function TransitionsModal({
                 </Button>
               </CardFooter>
             </Card>
-            <GridContainer >
-              <GridItem xs={12} sm={12} md={12}>
-                <Card>
-                <CardHeader color="primary">
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className={classes.cardTitleWhite}>Issues</h4>
-                  <div style={{ display: "flex" }}></div>
-                </div>
-              </CardHeader>
-              <CardBody>
-                {unit.issues.map(issue =>{
-                  return(
-                    <div>{issue.name}</div>
-                  )
-                })}
-              </CardBody>
-                </Card>
-              </GridItem>
-            </GridContainer>
+            <Card>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <CardHeader color="primary">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 className={classes.cardTitleWhite}>Issues</h4>
+                      <div style={{ display: "flex" }}></div>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    {issues.map((issue) => {
+                      return (
+                        <div
+                          className={
+                            issue.status == "Complete" ? classes.issueDone : ""
+                          }
+                          onClick={() => handleIssueClick(issue)}
+                        >
+                          {issue.name}
+                        </div>
+                      );
+                    })}
+                  </CardBody>
+                </GridItem>
+              </GridContainer>
+            </Card>
           </div>
         </Fade>
       </Modal>

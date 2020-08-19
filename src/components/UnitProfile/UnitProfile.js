@@ -141,7 +141,7 @@ export default function CompanyProfile({
                   setIssusesModal(true);
                 }}
               >
-                Add Issue
+                Issues
               </Button>
 
               <Button
