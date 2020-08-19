@@ -54,10 +54,8 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
 
   const context = useContext(Context);
   const {state, createUnit, editUnit, fetchUnits} = context;
-  const [unitDetails, setUnitDetails] = useState({});
+  const [unitDetails, setUnitDetails] = useState({occupied:"", tmi:{hydro:"", gas:"", water:""}});
   const [isCommercial, setIsCommercial] = useState(false);
-
-
 
   useEffect(() => {
 

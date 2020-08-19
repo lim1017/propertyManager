@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     fontSize: "20px",
   },
-  issueDone: {
-    backgroundColor: "green",
+  issuePending: {
+    backgroundColor: "red",
   },
 }));
 
@@ -116,7 +116,6 @@ export default function TransitionsModal({
     setIssueDetail(issue);
   };
 
-  console.log(issueDetail);
 
   return (
     <div>
@@ -212,7 +211,7 @@ export default function TransitionsModal({
                       return (
                         <div
                           className={
-                            issue.status == "Complete" ? classes.issueDone : ""
+                            issue.status == "Pending" ? classes.issuePending : ""
                           }
                           onClick={() => handleIssueClick(issue)}
                         >

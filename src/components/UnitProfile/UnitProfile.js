@@ -95,7 +95,6 @@ export default function CompanyProfile({
         })
       : null;
   };
-  console.log(unit)
 
   const handleDelete = async () =>{
     await propertyAPI.delete(`/unit/${unit.unit_id}`)
@@ -127,6 +126,14 @@ export default function CompanyProfile({
           >
             Unit: {unit.unit} {unit.occupied ? null : "*"}
             <div>
+            <Button
+                color="primary"
+                onClick={() => {
+                  setIssusesModal(true);
+                }}
+              >
+                Issues
+              </Button>
               <Button
                 color="primary"
                 onClick={() => {
@@ -135,15 +142,6 @@ export default function CompanyProfile({
               >
                 Add Tenant
               </Button>
-              <Button
-                color="primary"
-                onClick={() => {
-                  setIssusesModal(true);
-                }}
-              >
-                Issues
-              </Button>
-
               <Button
                 color="primary"
                 onClick={() => {
