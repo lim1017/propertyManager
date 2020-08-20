@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -14,6 +14,11 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
 import avatar from "assets/img/faces/marc.jpg";
+import { Context } from "../../hooks/reducers/appDataReducer";
+import propertyAPI from "../../apis/propertyManagerAPI"
+import Swal from 'sweetalert2'
+
+
 
 const styles = {
   cardCategoryWhite: {
@@ -38,6 +43,61 @@ const useStyles = makeStyles(styles);
 
 export default function UserProfile() {
   const classes = useStyles();
+
+  const context = useContext(Context);
+  const {
+    state,
+    dispatch,
+    fetchCompanies,
+    createCompany,
+    editCompany,
+    setActiveCompany,
+    fetchData,
+    fetchProperties,
+    fetchActiveUser,
+  } = context;
+
+
+  const [userDetails, setUserDetails] = useState(state.user)
+
+  
+  console.log(state)
+  console.log(userDetails)
+  useEffect(() => {
+    async function fetchData4App() {
+     
+      const user = await propertyAPI.get("/users");
+      setUserDetails(user.data[0])
+
+    }
+    fetchData4App();
+  }, []);
+
+  const handleChange = (e, id) => {
+    setUserDetails({ ...userDetails, [id]: e.target.value });
+  };
+
+  const handleSubmit= async()=>{
+    try{
+      
+      await propertyAPI.patch(`/users/${userDetails.user_id}`, userDetails);
+      fetchActiveUser(userDetails.user_id)
+
+      Swal.fire(
+        'User Profile Updated',
+        '',
+        'success'
+      )
+  
+    }
+
+    catch{  
+      alert('error')
+    }
+    
+
+  }
+
   return (
     <div>
       <GridContainer>
@@ -48,95 +108,95 @@ export default function UserProfile() {
               <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
             <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="Company (disabled)"
-                    id="company-disabled"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
-                  <CustomInput
-                    labelText="Username"
-                    id="username"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Email address"
-                    id="email-address"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
+         
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>First Name</InputLabel>
                   <CustomInput
-                    labelText="First Name"
-                    id="first-name"
+                    // labelText="First Name"
+                    id="first_name"
+                    value={userDetails?.first_name}
+                    handleChange={handleChange}
+
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
+                <InputLabel>Last Name</InputLabel>
                   <CustomInput
-                    labelText="Last Name"
-                    id="last-name"
+                    // labelText="Last Name"
+                    id="last_name"
+                    value={userDetails?.last_name}
+                    handleChange={handleChange}
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                   />
                 </GridItem>
               </GridContainer>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="City"
-                    id="city"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Country"
-                    id="country"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Postal Code"
-                    id="postal-code"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
+              
+              <GridItem xs={12} sm={12} md={6}>
+              <InputLabel>Phone</InputLabel>
+                <CustomInput
+                  // labelText="Phone#"
+                  id="phone"
+                  value={userDetails?.phone}
+                  handleChange={handleChange}
+                  formControlProps={{
+                    fullWidth: true,
+                    style: { marginTop: 0 },
+                  }}
+                />
+              </GridItem>
+       
+              <GridItem xs={12} sm={12} md={6}>
+              <InputLabel>Email</InputLabel>
+                <CustomInput
+                  // labelText="Email address"
+                  id="email"
+                  value={userDetails?.email}
+                  handleChange={handleChange}
+                  formControlProps={{
+                    fullWidth: true,
+                    style: { marginTop: 0 },
+                  }}
+                />
+              </GridItem>
+            </GridContainer>
+
+            <GridContainer>
+              
+              <GridItem xs={12} sm={12} md={8}>
+              <InputLabel>Profile Url:</InputLabel>
+                <CustomInput
+                  // labelText="Email address"
+                  id="profile_img"
+                  value={userDetails?.profile_img}
+                  handleChange={handleChange}
+                  formControlProps={{
+                    fullWidth: true,
+                    style: { marginTop: 0 },
+                  }}
+                />
+              </GridItem> 
+            </GridContainer> 
+
               <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                   <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
                   <CustomInput
-                    labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-                    id="about-me"
+                    // labelText="About"
+                    id="about"
+                    value={userDetails?.about}
+                    handleChange={handleChange}
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
+                      style: { marginTop: 0 },
                     }}
                     inputProps={{
                       multiline: true,
@@ -147,28 +207,25 @@ export default function UserProfile() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              <Button color="primary" onClick={handleSubmit}>Update Profile</Button>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        <GridItem xs={12} sm={12} md={4} style={{marginTop:"15px"}}>
           <Card profile>
             <CardAvatar profile>
               <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
+                <img
+                src={userDetails?.profile_img} alt="..."
+                width="500" length="300" />
               </a>
             </CardAvatar>
             <CardBody profile>
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
+              <h4 className={classes.cardTitle}>{userDetails?.first_name +" "+ userDetails?.last_name}</h4>
               <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
+                    {userDetails?.about}
               </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
             </CardBody>
           </Card>
         </GridItem>

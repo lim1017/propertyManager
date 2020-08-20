@@ -75,6 +75,13 @@ export const fetchData = (dispatch) => {
   };
 };
 
+export const editUser = (dispatch) => {
+  return async (userId) => {
+    await propertyAPI.patch("/users");
+    // await dispatch({ type: SET_USER, user: user.data[0] });
+  };
+};
+
 export const fetchActiveUser = (dispatch) => {
   return async (userId) => {
     const user = await propertyAPI.get("/users");
