@@ -54,7 +54,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
 
   const context = useContext(Context);
   const {state, createUnit, editUnit, fetchUnits} = context;
-  const [unitDetails, setUnitDetails] = useState({occupied:"", tmi:{hydro:"", gas:"", water:""}});
+  const [unitDetails, setUnitDetails] = useState({occupied:false, tmi:{hydro:false, gas:false, water:false}});
   const [isCommercial, setIsCommercial] = useState(false);
 
   useEffect(() => {
@@ -66,6 +66,8 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
 
     if (editState){
       getUnit()
+    } else {
+      setUnitDetails({occupied:false, tmi:{hydro:false, gas:false, water:false}})
     }
   }, [editState])
 
@@ -95,7 +97,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
       
     }
     
-    setUnitDetails({})
+    setUnitDetails({occupied:"", tmi:{hydro:"", gas:"", water:""}})
     handleClose()
 
   };

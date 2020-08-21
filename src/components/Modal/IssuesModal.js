@@ -49,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
   },
   issuePending: {
     backgroundColor: "red",
+    cursor: "pointer"
+  },
+  issueComplete: {
+    cursor: "pointer"
   },
 }));
 
@@ -102,7 +106,7 @@ export default function TransitionsModal({
       getIssues();
     }
 
-    handleClose();
+    // handleClose();
   };
 
   const handleDelete = async () => {
@@ -190,6 +194,9 @@ export default function TransitionsModal({
                 <Button color="primary" onClick={handleSubmit}>
                   Save
                 </Button>
+                <Button color="primary" onClick={()=> handleClose()}>
+                  Close
+                </Button>
               </CardFooter>
             </Card>
             <Card>
@@ -211,7 +218,7 @@ export default function TransitionsModal({
                       return (
                         <div
                           className={
-                            issue.status == "Pending" ? classes.issuePending : ""
+                            issue.status == "Pending" ? classes.issuePending : classes.issueComplete
                           }
                           onClick={() => handleIssueClick(issue)}
                         >

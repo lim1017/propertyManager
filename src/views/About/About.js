@@ -55,10 +55,14 @@ export default function About() {
                 Back-end: NodeJS, Express, PostgresSQL
               </div>
 
-              <div style={{marginTop:"3em"}}>
+              <div style={{marginTop:"2em"}}>
                 As a manager of couple small rental properties, I designed this application to suit my needs.
                 It is far from complete, as you can see from my <Link to={{pathname:"/admin/todo"}}>To Do list </Link> 
                 This is a v0.1 release just to get it out there.
+              </div>
+
+              <div style={{marginTop:"2em"}}>
+                Everything should be working along the "happy path"
               </div>
 
               </div>
