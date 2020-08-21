@@ -9,22 +9,16 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
 import Dropdown from "../Dropdown/Dropdown";
-import appDataContext from "../../hooks/useContext";
+import {Context} from "../../hooks/reducers/appDataReducer";
 import {
   SET_ACTIVE_COMPANY,
-  SET_PROPERTIES,
-  SET_DATA,
-  SET_COMPANY,
-  SET_TENANTS,
-  SET_LOADING,
-  SET_USER,
 } from "../../hooks/reducers/appDataReducer";
-import propertyAPI from "../../apis//propertyManagerAPI";
 
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
-  const { state, dispatch } = useContext(appDataContext);
+  const context = useContext(Context);
+  const { state, dispatch } = context
   const classes = useStyles();
 
   const { color } = props;
@@ -38,50 +32,6 @@ export default function Header(props) {
   const handleChg = (e) => {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
   };
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const user = await propertyAPI.get("/users");
-  //     dispatch({ type: SET_USER, user: user.data[0] });
-
-  //     const userID = user.data[0].user_id;
-  //     const companies = await propertyAPI.get(`/companies/${userID}`);
-  //     console.log(companies)
-  //     dispatch({
-  //       type: SET_COMPANY,
-  //       company: companies.data,
-  //       activeCompany: state.activeCompany
-  //         ? state.activeCompany
-  //         : companies.data[0].company_id,
-  //     });
-
-  //     const companyID = companies.data[0].company_id;
-  //     const properties = await propertyAPI.get(`/properties/${companyID}`);
-  //     dispatch({ type: SET_PROPERTIES, properties: properties.data });
-  //   }
-
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-
-  //   async function updateProperties() {
-  //     console.log(state)
-  //     // const companyID = state.activeCompany;
-  //     const activeCompany=state.company.filter(comp =>{
-  //       return comp.name===state.activeCompany
-  //     })
-  //     console.log(activeCompany[0])
-  //     const properties = await propertyAPI.get(`/properties/${activeCompany[0].company_id}`);
-  //     dispatch({ type: SET_PROPERTIES, properties: properties.data });
-  //   }
-
-  //   if(state.activeCompany){
-  //     updateProperties();
-  //   }
-  
-  // }, [state.activeCompany]);
-
   return (
     <AppBar
       className={classes.appBar + appBarClasses}
@@ -124,6 +74,13 @@ export default function Header(props) {
                 Create Company{" "}
               </Button>
             </Link>
+
+            <Link
+              to={{
+                pathname: `/admin/propertyprofile/create`,
+                state: { state: "create" },
+              }}
+            >
             <Button
               style={{
                 marginRight: "1em",
@@ -136,10 +93,15 @@ export default function Header(props) {
               {" "}
               Add Property{" "}
             </Button>
+            </Link>
           </div>
 
-          <div style={{ alignSelf: "center" }}>
-            <Button variant="contained" color="primary">
+          <div style={{ alignSelf: "center", fontWeight:"bold", fontSize:"20px" }}>
+            {state.user ? `Hello ${state.user.first_name}` : null }
+            <Button variant="contained" color="primary" 
+            style={{marginLeft:"10px"}}
+            onClick={()=>alert("sorry  implemented yet")}
+            >
               {" "}
               Logout{" "}
             </Button>
@@ -149,7 +111,6 @@ export default function Header(props) {
     </AppBar>
   );
 }
-
 Header.propTypes = {
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
   rtlActive: PropTypes.bool,

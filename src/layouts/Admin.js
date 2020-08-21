@@ -16,15 +16,16 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 
-import appDataContext from "../hooks/useContext";
+// import appDataContext from "../hooks/useContext";
 import useAppData from "../hooks/useAppData";
 
 import styles2 from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
 import {PropertyDetails} from "../views/PropertyDetails/PropertyDetails"
 import CompanyProfile from "../views/CompanyProfile/CompanyProfile"
-import CreateCompanyProfile from "../views/CompanyProfile/CreateCompanyProfile"
+import PropertyProfile from "../views/PropertyProfileCreate/PropertyProfile"
 
+import { Provider } from '../hooks/reducers/appDataReducer'
 
 import {
   createMuiTheme,
@@ -41,17 +42,17 @@ const theme = createMuiTheme({
 });
 
 const Admin = (props) => {
-  const { state, dispatch } = useAppData();
+  // const { state, dispatch } = useAppData();
   const useStyles = makeStyles(styles2);
   const classes = useStyles();
 
 
   return (
-    <appDataContext.Provider value={{ state, dispatch }}>
+    <Provider>
       <ThemeProvider theme={theme}>
         <Admin2 {...props} />
       </ThemeProvider>
-    </appDataContext.Provider>
+    </Provider>
   );
 };
 
@@ -61,11 +62,9 @@ const switchRoutes = (
   <Switch>
 
 <Route path="/admin/property/:id" component={PropertyDetails} />
-<Route path="/admin/companyprofile/create" component={CompanyProfile} />
-{/* <Route path="/admin/companyprofile/:id" component={CompanyProfile} /> */}
+<Route path="/admin/companyprofile/:id" component={CompanyProfile} />
+<Route path="/admin/propertyprofile/:id" component={PropertyProfile} />
 
-
-{/* <Route path="/admin/createproperty/" component={CreateProperty} /> */}
 
 
     {routes.map((prop, key) => {
@@ -164,7 +163,8 @@ function Admin2({ ...rest }) {
         ) : (
           <div className={classes.map}>{switchRoutes}</div>
         )}
-        {getRoute() ? <Footer /> : null}
+        {/* footer component */}
+        {/* {getRoute() ? <Footer /> : null} */}
         {/* <FixedPlugin
           handleImageClick={handleImageClick}
           handleColorClick={handleColorClick}
