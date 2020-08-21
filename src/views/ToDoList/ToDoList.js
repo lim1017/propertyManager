@@ -47,6 +47,7 @@ const toDoItems=[
   {name:"Implement a data table for tenants.  Would scale better for larger groups of tenants, allowing for search/sort etc of tenants", status:false},
   {name:"Create/Show ERD", status:false},
   {name:"Add indication of outstanding issues in list of properties", status:false},
+  {name:"Add ability to delete properties/companies/users", status:false},
 
 ]
 

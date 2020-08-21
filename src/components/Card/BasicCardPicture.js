@@ -57,7 +57,7 @@ export default function MediaCard({title, img, description, id, data}) {
           }}
         >
         <Button variant="contained" size="small" color="primary">
-          Learn More
+          Details
         </Button>
         </Link>
 
