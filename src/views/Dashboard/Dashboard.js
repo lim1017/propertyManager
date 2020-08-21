@@ -2,16 +2,7 @@ import React, { useContext, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Context } from "../../hooks/reducers/appDataReducer";
-import {
-  SET_DATA,
-  SET_COMPANY,
-  SET_TENANTS,
-  SET_PROPERTIES,
-  SET_LOADING,
-  SET_USER,
-  SET_ACTIVE_COMPANY,
-} from "../../hooks/reducers/appDataReducer";
-import { sortObj } from "../../helperFunctions"
+import {sortPropertyObj} from "../../helperFunctions"
 import BasicCardPicture from "../../components/Card/BasicCardPicture";
 import propertyAPI from "../../apis//propertyManagerAPI";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
@@ -59,7 +50,7 @@ export default function Dashboard(props) {
       }}
     >
       {state.properties ? (
-        state.properties.map((building) => {
+        state.properties.sort(sortPropertyObj).map((building) => {
           return (
             <div style={{ marginBottom: 10 }}>
               <BasicCardPicture

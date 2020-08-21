@@ -32,7 +32,6 @@ export default function Header(props) {
   const handleChg = (e) => {
     dispatch({ type: SET_ACTIVE_COMPANY, activeCompany: e.target.value });
   };
-
   return (
     <AppBar
       className={classes.appBar + appBarClasses}
@@ -97,8 +96,12 @@ export default function Header(props) {
             </Link>
           </div>
 
-          <div style={{ alignSelf: "center" }}>
-            <Button variant="contained" color="primary">
+          <div style={{ alignSelf: "center", fontWeight:"bold", fontSize:"20px" }}>
+            {state.user ? `Hello ${state.user.first_name}` : null }
+            <Button variant="contained" color="primary" 
+            style={{marginLeft:"10px"}}
+            onClick={()=>alert("sorry  implemented yet")}
+            >
               {" "}
               Logout{" "}
             </Button>
@@ -108,7 +111,6 @@ export default function Header(props) {
     </AppBar>
   );
 }
-
 Header.propTypes = {
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
   rtlActive: PropTypes.bool,

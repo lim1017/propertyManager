@@ -62,8 +62,8 @@ const switchRoutes = (
   <Switch>
 
 <Route path="/admin/property/:id" component={PropertyDetails} />
-<Route path="/admin/companyprofile/create" component={CompanyProfile} />
-<Route path="/admin/propertyprofile/create" component={PropertyProfile} />
+<Route path="/admin/companyprofile/:id" component={CompanyProfile} />
+<Route path="/admin/propertyprofile/:id" component={PropertyProfile} />
 
 
 
@@ -163,7 +163,8 @@ function Admin2({ ...rest }) {
         ) : (
           <div className={classes.map}>{switchRoutes}</div>
         )}
-        {getRoute() ? <Footer /> : null}
+        {/* footer component */}
+        {/* {getRoute() ? <Footer /> : null} */}
         {/* <FixedPlugin
           handleImageClick={handleImageClick}
           handleColorClick={handleColorClick}
