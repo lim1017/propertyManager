@@ -5,7 +5,6 @@ import { Context } from "../../hooks/reducers/appDataReducer";
 import { sortPropertyObj } from "../../helperFunctions";
 import BasicCardPicture from "../../components/Card/BasicCardPicture";
 import Spinner from "../../components/Spinner/Spinner"
-import propertyAPI from "../../apis//propertyManagerAPI";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
@@ -48,7 +47,6 @@ export default function Dashboard(props) {
         justifyContent: "space-around",
       }}
     >
-      {/* <Spinner /> */}
       {state.properties ? (
         state.properties.sort(sortPropertyObj).map((building) => {
           return (
@@ -66,6 +64,7 @@ export default function Dashboard(props) {
       ) : (
         <div style={{marginTop:"2em"}}>
           <Spinner />
+          <p style={{fontSize:"20px", marginTop:"30px"}}>Heroku free tier... </p>
         </div>
       )}
     </div>
