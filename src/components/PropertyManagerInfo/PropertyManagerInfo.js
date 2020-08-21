@@ -1,10 +1,8 @@
-import React from 'react'
+import React from "react";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { makeStyles } from "@material-ui/core/styles";
-
-
 
 const styles = {
   cardCategoryWhite: {
@@ -24,18 +22,15 @@ const styles = {
     textDecoration: "none",
     fontSize: "20px",
   },
-  propertyMangerText:{
-    fontSize:"18px"
-  }
+  propertyMangerText: {
+    fontSize: "18px",
+  },
 };
 
 const useStyles = makeStyles(styles);
 
-export default function PropertyManagerInfo({manager}) {
-
-  const { firstName, lastName, personalEmail, phone1, title } = manager
-
-  console.log(manager)
+export default function PropertyManagerInfo({ manager }) {
+  const { firstName, lastName, personalEmail, phone1, title } = manager;
 
   const classes = useStyles();
 
@@ -45,20 +40,14 @@ export default function PropertyManagerInfo({manager}) {
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
             Property Manger: {firstName} {lastName}
-
           </h4>
         </CardHeader>
 
         <CardBody>
-          <div>
-            {phone1}
-          </div>
-          <div>
-            {personalEmail}
-          </div>
+          <div>{phone1}</div>
+          <div>{personalEmail}</div>
         </CardBody>
       </Card>
-
     </div>
-  )
+  );
 }

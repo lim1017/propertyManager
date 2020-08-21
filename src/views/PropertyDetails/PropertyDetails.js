@@ -112,9 +112,7 @@ export const PropertyDetails = (props) => {
       : null;
   };
 
-  console.log(propertyDetails);
-
-  let isManager= propertyDetails.manager ? 8 : 12
+  let isManager = propertyDetails.manager ? 8 : 12;
 
   return (
     <div>
@@ -126,35 +124,35 @@ export const PropertyDetails = (props) => {
         unitInModal={unitInModal}
         setEditState={setIsEditing}
       />
-            <GridContainer>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={isManager}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>
+                {propertyDetails.name} // {propertyDetails.type}
+              </h4>
+              <div className={classes.cardCategoryWhite}>
+                {propertyDetails.address?.address?.toUpperCase()}
+              </div>
+              <div className={classes.cardCategoryWhite}>
+                {propertyDetails.address?.city?.toUpperCase()},{" "}
+                {propertyDetails.address?.postal?.toUpperCase()},{" "}
+                {propertyDetails.address?.country?.toUpperCase()}
+              </div>
+              <div className={classes.cardCategoryWhite}>
+                {propertyDetails.address?.country?.toUpperCase()}
+              </div>
+            </CardHeader>
 
-      <GridItem xs={12} sm={12} md={isManager}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>
-              {propertyDetails.name} // {propertyDetails.type}
-            </h4>
-            <div className={classes.cardCategoryWhite}>
-              {propertyDetails.address?.address?.toUpperCase()}
-            </div>
-            <div className={classes.cardCategoryWhite}>
-              {propertyDetails.address?.city?.toUpperCase()},{" "}
-              {propertyDetails.address?.postal?.toUpperCase()},{" "}
-              {propertyDetails.address?.country?.toUpperCase()}
-            </div>
-            <div className={classes.cardCategoryWhite}>
-              {propertyDetails.address?.country?.toUpperCase()}
-            </div>
-          </CardHeader>
+            <CardBody></CardBody>
+          </Card>
+        </GridItem>
 
-          <CardBody></CardBody>
-        </Card>
-      </GridItem>
-
-      <GridItem xs={12} sm={12} md={4}>
-        {propertyDetails.manager ? <PropertyManagerInfo manager={propertyDetails.manager} /> : null }
-      </GridItem>
-
+        <GridItem xs={12} sm={12} md={4}>
+          {propertyDetails.manager ? (
+            <PropertyManagerInfo manager={propertyDetails.manager} />
+          ) : null}
+        </GridItem>
       </GridContainer>
 
       <GridContainer
@@ -168,7 +166,14 @@ export const PropertyDetails = (props) => {
                   <p style={{ fontSize: 22, marginTop: 5, marginRight: 10 }}>
                     Units{" "}
                   </p>
-                  <p style={{ fontSize: 12, marginTop: 5, marginRight: 10, fontWeight:"bold" }}>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      marginTop: 5,
+                      marginRight: 10,
+                      fontWeight: "bold",
+                    }}
+                  >
                     *Unoccupied
                   </p>
                 </div>

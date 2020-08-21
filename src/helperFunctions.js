@@ -11,7 +11,6 @@ export const sortObj = (a, b) => {
   return comparison;
 };
 export const sortPropertyObj = (a, b) => {
-  console.log(a)
   const company1 = a.property_id;
   const company2 = b.property_id;
 

@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Context } from "../../hooks/reducers/appDataReducer";
-import {sortPropertyObj} from "../../helperFunctions"
+import { sortPropertyObj } from "../../helperFunctions";
 import BasicCardPicture from "../../components/Card/BasicCardPicture";
+import Spinner from "../../components/Spinner/Spinner"
 import propertyAPI from "../../apis//propertyManagerAPI";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
@@ -24,15 +25,13 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     async function fetchData4App() {
-      fetchData(state)
+      fetchData(state);
       if (state.activeCompany) {
         updateProperties();
       }
     }
     fetchData4App();
   }, []);
-
-  console.log(state)
 
   useEffect(() => {
     if (state.activeCompany) {
@@ -49,10 +48,11 @@ export default function Dashboard(props) {
         justifyContent: "space-around",
       }}
     >
+      {/* <Spinner /> */}
       {state.properties ? (
         state.properties.sort(sortPropertyObj).map((building) => {
           return (
-            <div style={{ marginBottom: 10 }}>
+            <div style={{ marginTop: "1em" }}>
               <BasicCardPicture
                 title={building.name}
                 img={building.image}
@@ -64,7 +64,9 @@ export default function Dashboard(props) {
           );
         })
       ) : (
-        <div>LOADING </div>
+        <div style={{marginTop:"2em"}}>
+          <Spinner />
+        </div>
       )}
     </div>
   );

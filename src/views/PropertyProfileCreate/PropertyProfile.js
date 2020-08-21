@@ -54,10 +54,10 @@ export default function CompanyProfile(props) {
     fetchData,
     fetchProperties,
     createProperty,
-    editProperty
+    editProperty,
   } = context;
 
-  const activeProperty=props.match.params.id
+  const activeProperty = props.match.params.id;
   let isEditing = props.location.pathname.endsWith("create") ? false : true;
   const [editState, setEditState] = useState(isEditing);
   const [propertyDetails, setpropertyDetails] = useState({});
@@ -131,14 +131,11 @@ export default function CompanyProfile(props) {
   };
 
   const handleSubmit = async () => {
-
     const activeCompany = state.company.filter((comp) => {
       return comp.name === state.activeCompany;
     });
 
-
-    if (!editState) { //create
-
+    if (!editState) {
       const activeCompany = state.company.filter((comp) => {
         return comp.name === state.activeCompany;
       });
@@ -148,13 +145,11 @@ export default function CompanyProfile(props) {
 
       props.history.push("/admin/dashboard");
     } else {
-      console.log(propertyDetails)
       await editProperty(propertyDetails, activeUser);
       await fetchProperties(activeCompany);
       props.history.push("/admin/dashboard");
     }
   };
-
 
   const classes = useStyles();
   return (

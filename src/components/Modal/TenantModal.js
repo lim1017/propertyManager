@@ -55,30 +55,35 @@ export default function TransitionsModal({
   isEditingTenant,
   setIsEditingTenant,
   unitInModalTenant,
-  
 }) {
   const classes = useStyles();
   const context = useContext(Context);
-  const { state, createUnit, editUnit, fetchUnits, createTenant, fetchTenants, editTenant } = context;
+  const {
+    state,
+    createUnit,
+    editUnit,
+    fetchUnits,
+    createTenant,
+    fetchTenants,
+    editTenant,
+  } = context;
   const [tenantDetails, setTenantDetails] = useState({});
-  
+
   useEffect(() => {
-    async function getTenant(){  
-      const TenantInfo = await propertyAPI.get(`/tenant/${unitInModalTenant}`)
-      setTenantDetails(TenantInfo.data[0])
+    async function getTenant() {
+      const TenantInfo = await propertyAPI.get(`/tenant/${unitInModalTenant}`);
+      setTenantDetails(TenantInfo.data[0]);
     }
 
-    if (isEditingTenant){
-      getTenant()
+    if (isEditingTenant) {
+      getTenant();
     }
   }, [isEditingTenant]);
 
   const handleClose = () => {
     setTenantModal(false);
     // setIsEditingTenant(false)
-    setTenantDetails({})
-    
-    
+    setTenantDetails({});
   };
 
   const handleChange = (e, id) => {
@@ -87,28 +92,23 @@ export default function TransitionsModal({
 
   const handleSubmit = async () => {
     if (isEditingTenant) {
-      await editTenant(tenantDetails)
-      await fetchTenants(data.unit_id)
+      await editTenant(tenantDetails);
+      await fetchTenants(data.unit_id);
       // setIsEditingTenant(false)
-
-
     } else {
-      console.log(tenantDetails)
-      console.log(data.unit_id)
       await createTenant(tenantDetails, data.unit_id);
-      await fetchTenants(data.unit_id)
+      await fetchTenants(data.unit_id);
     }
 
     handleClose();
   };
 
-  const handleDelete = async () =>{
-    await propertyAPI.delete(`/tenant/${tenantDetails.tenant_id}`)
-    fetchTenants()
-    handleClose()
-  }
+  const handleDelete = async () => {
+    await propertyAPI.delete(`/tenant/${tenantDetails.tenant_id}`);
+    fetchTenants();
+    handleClose();
+  };
 
-  // console.log(data);
 
   return (
     <div>
@@ -205,11 +205,11 @@ export default function TransitionsModal({
                 <Button color="primary" onClick={handleSubmit}>
                   Save
                 </Button>
-                {isEditingTenant ? 
-                <Button color="primary" onClick={handleDelete} >
-                  Delete
-                </Button>
-                :null}
+                {isEditingTenant ? (
+                  <Button color="primary" onClick={handleDelete}>
+                    Delete
+                  </Button>
+                ) : null}
               </CardFooter>
             </Card>
           </div>
