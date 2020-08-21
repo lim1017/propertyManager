@@ -9,12 +9,11 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI";
 import { Context } from "../../hooks/reducers/appDataReducer";
+import Spinner from "../../components/Spinner/Spinner"
 
 import {
   SET_ACTIVE_COMPANY,
@@ -150,8 +149,11 @@ export default function CompanyProfile(props) {
   return (
     <div>
       {loading ? (
-        <div>loading........</div>
-      ) : (
+      <div style={{marginTop:"2em", display:"flex", justifyContent:"center"}}>
+        <Spinner />
+        {/* <p style={{fontSize:"20px", marginTop:"30px"}}>Loading... </p> */}
+      </div>
+    ) : (
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>

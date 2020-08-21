@@ -13,7 +13,6 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-import avatar from "assets/img/faces/marc.jpg";
 import { Context } from "../../hooks/reducers/appDataReducer";
 import propertyAPI from "../../apis/propertyManagerAPI";
 import Swal from "sweetalert2";
@@ -45,13 +44,6 @@ export default function UserProfile() {
   const context = useContext(Context);
   const {
     state,
-    dispatch,
-    fetchCompanies,
-    createCompany,
-    editCompany,
-    setActiveCompany,
-    fetchData,
-    fetchProperties,
     fetchActiveUser,
   } = context;
 
