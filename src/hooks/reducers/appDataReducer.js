@@ -10,6 +10,8 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_ACTIVE_COMPANY = "SET_ACTIVE_COMPANY";
 export const SET_USER = "SET_USER";
 export const SET_UNITS = "SET_UNITS";
+export const SET_TODO = "SET_TODO";
+
 
 export default function reducerz(state, action) {
   switch (action.type) {
@@ -48,12 +50,24 @@ export default function reducerz(state, action) {
         ...state,
         units: action.units,
       };
+    case SET_TODO:
+      return {
+        ...state,
+        todo: action.todo,
+      };
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
       );
   }
 }
+
+export const setTodo = (dispatch) => {
+  return async (toDoList) => {
+    await dispatch({ type:SET_TODO, todo: toDoList})
+
+  };
+};
 
 export const fetchData = (dispatch) => {
   return async (state) => {
@@ -243,7 +257,8 @@ export const { Context, Provider } = createDataContext(
     fetchUnits,
     createTenant,
     fetchTenants,
-    editTenant
+    editTenant,
+    setTodo
   },
   {}
 );

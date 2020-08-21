@@ -406,7 +406,7 @@ export default function CompanyProfile(props) {
                       // labelText="Tell us about this company"
                       id="description"
                       handleChange={handleChange}
-                      value={propertyDetails.notes}
+                      value={propertyDetails.description}
                       formControlProps={{
                         fullWidth: true,
                       }}

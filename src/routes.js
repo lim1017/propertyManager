@@ -20,6 +20,8 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import Business from "@material-ui/icons/Business";
 
+import Info from "@material-ui/icons/Info";
+
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
@@ -31,6 +33,8 @@ import DashboardPage from "views/Dashboard/Dashboard.js";
 import CompanyProfile from "views/CompanyProfile/CompanyProfile"
 import UserProfile from "views/UserProfile/UserProfile.js";
 import About from "views/About/About.js";
+import ToDoList from "views/ToDoList/ToDoList.js";
+
 
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
@@ -68,13 +72,22 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/todo",
+    name: "To Do",
+    rtlName: "ملف تعريفي للمستخدم",
+    icon: LibraryBooks,
+    component: ToDoList,
+    layout: "/admin"
+  },
+  {
     path: "/about",
     name: "About",
     rtlName: "ملف تعريفي للمستخدم",
-    icon: LibraryBooks,
+    icon: Info,
     component: About,
     layout: "/admin"
   },
+  
   // {
   //   path: "/table",
   //   name: "Table List",

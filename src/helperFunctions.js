@@ -10,6 +10,19 @@ export const sortObj = (a, b) => {
   }
   return comparison;
 };
+export const sortPropertyObj = (a, b) => {
+  console.log(a)
+  const company1 = a.property_id;
+  const company2 = b.property_id;
+
+  let comparison = 0;
+  if (company1 > company2) {
+    comparison = 1;
+  } else if (company1 < company2) {
+    comparison = -1;
+  }
+  return comparison;
+};
 
 export const sortObjUnit = (a, b) => {
   const unit1 = a.unit;

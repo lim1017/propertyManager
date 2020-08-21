@@ -29,18 +29,18 @@ const PurpleCheckbox = withStyles({
   checked: {},
 })((props) => <Checkbox color="default" {...props} />);
 
-export default function CheckboxLabels({label, initalState, handleChange, color}) {
+export default function CheckboxLabels({label, initalState, handleChange, color, id}) {
   return (
     <FormGroup row>
       {color === "purple" ?
       <FormControlLabel
-      control={<PurpleCheckbox checked={initalState} onChange={(e)=>handleChange(e, label)} name="checkedG" />}
+      control={<PurpleCheckbox checked={initalState} onChange={(e)=>handleChange(e, label, id)} name="checkedG" />}
       label={label}
       style={{color:"purple"}}
       />
       :
       <FormControlLabel
-        control={<GreenCheckbox checked={initalState} onChange={(e)=>handleChange(e, label)} name="checkedG" />}
+        control={<GreenCheckbox checked={initalState} onChange={(e)=>handleChange(e, label, id)} name="checkedG" />}
         label={label}
         style={{color:"white"}}
       />
