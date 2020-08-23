@@ -60,7 +60,7 @@ export default function CompanyProfile(props) {
   const [loading, setLoading] = useState(isEditing ? true : false);
 
   const activeUser = localStorage.getItem("id");
-
+console.log(state)
   async function updateProperties() {
     const activeCompany = state.company.filter((comp) => {
       return comp.name === state.activeCompany;

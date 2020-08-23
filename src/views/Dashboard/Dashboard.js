@@ -20,14 +20,17 @@ export default function Dashboard(props) {
     await fetchProperties(activeCompany);
   }
 
-  // localStorage.setItem("id", user.data[0].user_id);
 
   useEffect(() => {
     async function fetchData4App() {
-      fetchData(state);
+      await fetchData(state);
       if (state.activeCompany) {
         updateProperties();
       }
+
+      // localStorage.setItem("id", user.data[0].user_id);
+      localStorage.setItem("id", state.user.user_id);
+
     }
     fetchData4App();
   }, []);
@@ -65,6 +68,7 @@ export default function Dashboard(props) {
         <div style={{marginTop:"2em"}}>
           <Spinner />
           <p style={{fontSize:"20px", marginTop:"30px"}}>Heroku free tier... </p>
+          <p style={{fontSize:"20px", marginTop:"30px"}}>Allow up to 20 seconds </p>
         </div>
       )}
     </div>
