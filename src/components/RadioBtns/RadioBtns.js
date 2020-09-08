@@ -21,7 +21,7 @@ export default function RadioButtonsGroup({
   return (
     <div>
       <FormControl component="fieldset">
-        <FormLabel component="legend">Status</FormLabel>
+        <FormLabel component="legend">Status <span style={{fontSize:"10px", color:'red'}}>*Required</span></FormLabel>
         <RadioGroup
           row={true}
           aria-label="gender"
