@@ -120,7 +120,7 @@ export default function TransitionsModal({
     setIssueDetail(issue);
   };
 
-  let isDisabled= issueDetail.name && issueDetail.status ? false:true
+  let isDisabled= issueDetail.name.trim() && issueDetail.status ? false:true
 
 
   return (

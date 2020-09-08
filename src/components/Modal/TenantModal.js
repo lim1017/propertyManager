@@ -110,7 +110,7 @@ export default function TransitionsModal({
     handleClose();
   };
 
-let isDisabled= tenantDetails.name ? false:true
+let isDisabled= tenantDetails?.name?.trim() ? false : true
 
   return (
     <div>
@@ -143,6 +143,7 @@ let isDisabled= tenantDetails.name ? false:true
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={6}>
+                  <InputLabel>Name <span style={{fontSize:"10px", color:'red'}}>*Required</span> </InputLabel>
                     <CustomInput 
                       id="name"
                       handleChange={handleChange}
