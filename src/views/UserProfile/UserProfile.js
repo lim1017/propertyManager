@@ -72,6 +72,8 @@ export default function UserProfile() {
     }
   };
 
+  let isDisabled = userDetails.first_name ? false : true;
+
   return (
     <div>
       <GridContainer>
@@ -84,7 +86,7 @@ export default function UserProfile() {
             <CardBody>
               <GridContainer>
                 <GridItem xs={12} sm={12} md={6}>
-                  <InputLabel>First Name</InputLabel>
+                  <InputLabel>First Name <span style={{fontSize:"10px", color:'red'}}>*Required</span></InputLabel>
                   <CustomInput
                     // labelText="First Name"
                     id="first_name"
@@ -177,7 +179,7 @@ export default function UserProfile() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary" onClick={handleSubmit}>
+              <Button color="primary" onClick={handleSubmit} disabled={isDisabled}>
                 Update Profile
               </Button>
             </CardFooter>

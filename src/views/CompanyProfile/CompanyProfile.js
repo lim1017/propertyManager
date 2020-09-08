@@ -144,14 +144,14 @@ console.log(state)
     }
   };
 
-
   const classes = useStyles();
+  let isDisabled = companyDetails?.name?.trim() ? false : true
+
   return (
     <div>
       {loading ? (
       <div style={{marginTop:"2em", display:"flex", justifyContent:"center"}}>
         <Spinner />
-        {/* <p style={{fontSize:"20px", marginTop:"30px"}}>Loading... </p> */}
       </div>
     ) : (
         <GridContainer>
@@ -170,7 +170,7 @@ console.log(state)
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={5}>
-                    <InputLabel>Company Name</InputLabel>
+                    <InputLabel>Company Name <span style={{fontSize:"10px", color:'red'}}>*Required</span></InputLabel>
                     <CustomInput
                       // labelText="Company Name"
                       id="name"
@@ -380,7 +380,7 @@ console.log(state)
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button color="primary" onClick={handleSubmit}>
+                <Button color="primary" onClick={handleSubmit} disabled={isDisabled}>
                   Save Profile
                 </Button>
               </CardFooter>
