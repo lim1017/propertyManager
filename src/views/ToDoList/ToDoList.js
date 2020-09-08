@@ -33,8 +33,8 @@ const useStyles = makeStyles(styles);
 
 
 const toDoItems=[
+  {name:"Implement form validation/error handling", status:true},
   {name:"Implement login for mutiple users", status:false},
-  {name:"Implement form validation/error handling", status:false},
   {name:"Better stats/analytics for properties", status:false},
   {name:"Helpful resources", status:false},
   {name:"Implement a data table for tenants.  Would scale better for larger groups of tenants, allowing for search/sort etc of tenants", status:false},
