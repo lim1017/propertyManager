@@ -260,5 +260,5 @@ export const { Context, Provider } = createDataContext(
     editTenant,
     setTodo
   },
-  {}
+  {user: {user_id: 1}}
 );

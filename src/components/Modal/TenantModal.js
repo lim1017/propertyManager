@@ -104,11 +104,13 @@ export default function TransitionsModal({
   };
 
   const handleDelete = async () => {
+    console.log(tenantDetails.tenant_id)
     await propertyAPI.delete(`/tenant/${tenantDetails.tenant_id}`);
     fetchTenants();
     handleClose();
   };
 
+let isDisabled= tenantDetails.name ? false:true
 
   return (
     <div>
@@ -141,8 +143,8 @@ export default function TransitionsModal({
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={6}>
-                    <InputLabel>Name </InputLabel>
-                    <CustomInput
+                    <InputLabel>Name <span style={{fontSize:"10px", color:'red'}}>*Required</span> </InputLabel>
+                    <CustomInput 
                       id="name"
                       handleChange={handleChange}
                       value={tenantDetails?.name}
@@ -150,7 +152,7 @@ export default function TransitionsModal({
                         fullWidth: true,
                         style: { marginTop: 0 },
                       }}
-                      inputProps={{}}
+                      required
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
@@ -202,7 +204,7 @@ export default function TransitionsModal({
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button color="primary" onClick={handleSubmit}>
+                <Button color="primary" onClick={handleSubmit} disabled={isDisabled}>
                   Save
                 </Button>
                 {isEditingTenant ? (
