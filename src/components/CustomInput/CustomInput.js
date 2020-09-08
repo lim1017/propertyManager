@@ -41,6 +41,9 @@ export default function CustomInput(props) {
     [classes.marginTop]: labelText === undefined
   });
 
+
+  console.log(props.required)
+
   return (
     <FormControl
       {...formControlProps}
@@ -52,7 +55,7 @@ export default function CustomInput(props) {
           htmlFor={id}
           {...labelProps}
         >
-          {labelText}
+          {labelText} 
         </InputLabel>
       ) : null}
       <Input
@@ -65,6 +68,8 @@ export default function CustomInput(props) {
         value={value}
         onChange={(e)=>handleChange(e, id)}
         {...inputProps}
+        required={props.required}
+        error={props.error}
       />
       {error ? (
         <Clear className={classes.feedback + " " + classes.labelRootError} />

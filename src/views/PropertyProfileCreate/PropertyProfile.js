@@ -9,17 +9,13 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import avatar from "assets/img/faces/marc.jpg";
 import propertyAPI from "../../apis/propertyManagerAPI";
 import { Context } from "../../hooks/reducers/appDataReducer";
 
-import {
-  SET_ACTIVE_COMPANY,
-  SET_COMPANY,
-} from "../../hooks/reducers/appDataReducer";
+import CardAvatar from "components/Card/CardAvatar.js";
+import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {
   cardCategoryWhite: {
@@ -152,6 +148,8 @@ export default function CompanyProfile(props) {
   };
 
   const classes = useStyles();
+  let isDisabled = propertyDetails?.name?.trim() ? false : true
+
   return (
     <div>
       {loading ? (
@@ -173,7 +171,7 @@ export default function CompanyProfile(props) {
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={5}>
-                    <InputLabel>Property Name</InputLabel>
+                    <InputLabel>Property Name <span style={{fontSize:"10px", color:'red'}}>*Required</span></InputLabel>
                     <CustomInput
                       // labelText="Company Name"
                       id="name"
@@ -414,7 +412,7 @@ export default function CompanyProfile(props) {
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button color="primary" onClick={handleSubmit}>
+                <Button color="primary" onClick={handleSubmit} disabled={isDisabled}>
                   Save Profile
                 </Button>
               </CardFooter>

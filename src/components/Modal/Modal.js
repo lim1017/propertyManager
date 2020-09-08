@@ -101,6 +101,9 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
     handleClose()
 
   };
+
+  let isDisabled= unitDetails?.unit?.trim() && unitDetails.rent.trim() ? false : true
+
   
   return (
     <div>
@@ -132,7 +135,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
               <CardBody>
                 <GridContainer>
                 <GridItem xs={12} sm={12} md={2}>
-                    <InputLabel>Unit </InputLabel>
+                    <InputLabel>Unit <span style={{fontSize:"10px", color:'red'}}>*Required</span> </InputLabel>
                     <CustomInput
                       id="unit"
                       handleChange={handleChange}
@@ -145,7 +148,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
-                    <InputLabel>Rent</InputLabel>
+                    <InputLabel>Rent <span style={{fontSize:"10px", color:'red'}}>*Required</span></InputLabel>
                     <CustomInput
                       // labelText="Company Name"
                       id="rent"
@@ -223,7 +226,7 @@ export default function TransitionsModal({ showModal, setShowModal, data, editSt
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button color="primary" onClick={handleSubmit} >
+                <Button color="primary" onClick={handleSubmit} disabled={isDisabled} >
                   Save
                 </Button>
               </CardFooter>

@@ -120,6 +120,8 @@ export default function TransitionsModal({
     setIssueDetail(issue);
   };
 
+  let isDisabled= issueDetail.name.trim() && issueDetail.status ? false:true
+
 
   return (
     <div>
@@ -149,7 +151,7 @@ export default function TransitionsModal({
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={7}>
-                    <InputLabel>Issue </InputLabel>
+                    <InputLabel>Issue <span style={{fontSize:"10px", color:'red'}}>*Required</span> </InputLabel>
                     <CustomInput
                       id="name"
                       handleChange={handleChange}
@@ -162,6 +164,7 @@ export default function TransitionsModal({
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={5}>
+                  {/* <InputLabel>Status <span style={{fontSize:"10px", color:'red'}}>*Required</span> </InputLabel> */}
                     <RadioBtns
                       id="status"
                       data={["Pending", "Complete"]}
@@ -191,7 +194,7 @@ export default function TransitionsModal({
                 </GridContainer>
               </CardBody>
               <CardFooter>
-                <Button color="primary" onClick={handleSubmit}>
+                <Button color="primary" onClick={handleSubmit} disabled={isDisabled}>
                   Save
                 </Button>
                 <Button color="primary" onClick={()=> handleClose()}>
